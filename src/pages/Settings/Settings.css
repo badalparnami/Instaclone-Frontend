@@ -1,0 +1,266 @@
+.settings-page {
+  padding-top: 8rem;
+  max-width: 93.5rem;
+  margin: 0 auto;
+}
+
+.settings-page .settings-page-grid {
+  background-color: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  display: grid;
+  grid-template-columns: 25rem 1fr;
+}
+
+.settings-page .settings_sidebar {
+  border-right: 1px solid #dbdbdb;
+}
+
+.settings_sidebar ul {
+  list-style: none;
+}
+
+.settings_sidebar ul a {
+  text-decoration: none;
+  color: #262626;
+  font-size: 1.6rem;
+  display: block;
+  border-left: 2px solid #fff;
+}
+
+.settings_sidebar ul a:hover {
+  background-color: #fafafa;
+  border-color: #dbdbdb;
+}
+
+.settings_sidebar ul a.active {
+  border-color: #262626;
+  font-weight: 600;
+}
+
+.settings_sidebar ul a.active:hover {
+  background-color: #fff;
+  border-color: #262626;
+}
+
+.settings_sidebar ul li {
+  padding: 1.5rem 2.5rem;
+}
+
+.settings-page-grid .settings-content {
+  /* padding: 4rem 0rem; */
+  padding-bottom: 4rem;
+}
+
+.settings-content .img-container {
+  margin: 3.2rem 0 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.settings-content .img-container .img {
+  margin: 2px 3.2rem 0 12.4rem;
+  height: 3.8rem;
+  width: 3.8rem;
+}
+
+.settings-content .img-container .img button {
+  border-radius: 50%;
+  background-color: #fff;
+  overflow: hidden;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.settings-content .img-container .settings_username h1 {
+  font-size: 2rem;
+  line-height: 2.2rem;
+  margin-bottom: 2px;
+  font-weight: 400;
+}
+
+.settings-content .img-container .settings_username button {
+  cursor: pointer;
+  font-weight: 600;
+  background: 0 0;
+  border: 0;
+  color: #0095f6;
+  outline: none;
+  font-size: 1.4rem;
+}
+
+.settings-content form {
+  margin: 1.6rem 0;
+}
+
+.settings-content form .form-group {
+  margin-bottom: 1.6rem;
+  display: flex;
+}
+
+/* .settings-content form.privacy .form-group {
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.settings-content form.privacy .form-group::before {
+  content: "";
+  position: absolute;
+  left: 25px;
+  bottom: 0;
+  width: 90%;
+  border-bottom: 1px solid #dbdbdb;
+} */
+
+.settings-content form .form-group aside {
+  padding: 0 3.2rem;
+  text-align: right;
+  color: #262626;
+  font-weight: 600;
+  line-height: 1.8rem;
+  margin-top: 0.6rem;
+  flex-basis: 19.4rem;
+}
+
+.settings-content form.privacy .form-group:nth-of-type(1) aside {
+  margin-top: 0;
+}
+
+.settings-content form .input-component {
+  flex-basis: 35.5rem;
+  padding-right: 6rem;
+  color: #262626;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-content form .input-component-sub {
+  width: 100%;
+  max-width: 34.5rem;
+  flex: 0 0 auto;
+}
+
+.settings-content .password-change .input-component-sub {
+  max-width: unset;
+}
+
+.input-component-sub input,
+.input-component-sub textarea {
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  color: #262626;
+  flex: 0 1 35.5rem;
+  height: 3.2rem;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+.password-change .input-component-sub input {
+  background: #fafafa;
+  border-radius: 6px;
+  font-size: 1.4rem;
+  line-height: 3rem;
+  padding: 0.4rem 1.2rem;
+}
+
+.input-component-sub textarea {
+  height: 6rem;
+  padding: 0.6rem 1rem;
+  resize: vertical;
+}
+
+.input-component-sub p {
+  margin-top: 1.6rem;
+  margin-bottom: 0.8rem;
+  color: #8e8e8e;
+  font-weight: 400;
+  font-size: 1.2rem;
+}
+
+.input-component-sub h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #8e8e8e;
+  margin-bottom: 0.4rem;
+}
+
+.input-component-sub h2 + p {
+  margin-top: 0;
+}
+
+.input-component-sub button {
+  margin-top: 1.6rem;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: #0095f6;
+  outline: none;
+}
+
+.password-change .input-component-sub button {
+  font-size: 1.4rem;
+}
+
+.privacy .input-component input[type="checkbox"] {
+  position: absolute;
+  left: -9999px;
+}
+
+.privacy .input-component .checkbox-lookalike {
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  display: inline-block;
+  height: 1.6rem;
+  margin: 0 8px 0 3px;
+  width: 1.6rem;
+  position: relative;
+  cursor: pointer;
+}
+
+.privacy
+  .input-component
+  input[type="checkbox"]:checked
+  + .checkbox-lookalike::before {
+  border-bottom: 2px solid #262626;
+  border-left: 2px solid #262626;
+  content: "";
+  display: block;
+  height: 5px;
+  left: 2px;
+  position: absolute;
+  top: 3px;
+  -webkit-transform: rotateZ(-45deg);
+  transform: rotateZ(-45deg);
+  width: 1rem;
+}
+
+.input-component-sub .radio-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 4px;
+  width: fit-content;
+}
+
+.input-component-sub .radio-button input[type="radio"] {
+  flex: unset;
+  margin-right: 1rem;
+  height: 1.8rem;
+  width: 1.8rem;
+  cursor: inherit;
+}
+
+.input-component-sub button.revert {
+  background-color: transparent;
+  color: #8e8e8e;
+  text-decoration: underline;
+  padding: 0;
+  margin-top: 0;
+}

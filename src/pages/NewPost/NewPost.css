@@ -1,0 +1,246 @@
+.new-post {
+  padding: 8rem 0;
+  max-width: 60rem;
+  margin: 0 auto;
+  min-height: 20rem;
+  background-color: #fafafa;
+  /* box-shadow: 0 1rem 2rem #262626; */
+  display: grid;
+  grid-template-rows: min-content 50rem 15rem;
+}
+
+.new-post__header {
+  display: grid;
+  background-color: #fff;
+  padding: 0 2rem;
+  border: 1px solid #dbdbdb;
+  width: 100%;
+  height: 5rem;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  justify-items: center;
+}
+
+.new-post__header button {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.8rem;
+}
+
+.new-post__header button.close {
+  font-size: 2.4rem;
+  margin-right: 1rem;
+  justify-self: self-start;
+}
+
+.new-post__header button.close.back {
+  padding: 0;
+}
+
+.new-post__header h3 {
+  font-size: 1.5rem;
+  color: #262626;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.new-post__header button.next {
+  justify-self: end;
+  font-size: 1.5rem;
+  color: #0095f6;
+  font-weight: 600;
+}
+
+.new-post__preview {
+  height: 100%;
+  border: 1px solid #dbdbdb;
+  overflow: hidden;
+  position: relative;
+  border-top: none;
+  border-bottom: none;
+}
+
+.new-post__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.new-post__preview .rotate {
+  position: absolute;
+  border: 0;
+  outline: 0;
+  z-index: 2;
+  background-color: transparent;
+  right: 2rem;
+  bottom: 2rem;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+}
+
+.new-post__preview .rotate span {
+  background-image: url("./rotate-icon.png");
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  display: block;
+}
+
+.new-post__filter {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 1rem;
+  text-align: center;
+  overflow-x: auto;
+  position: relative;
+  border: 1px solid #dbdbdb;
+  background-color: #fff;
+}
+
+.new-post__filter li {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.new-post__filter li span {
+  margin-bottom: 5px;
+  font-size: 1.2rem;
+  color: #999;
+}
+
+.new-post__filter li span.active {
+  color: #262626;
+}
+
+.new-post__filter li img {
+  height: 8rem;
+  width: 12rem;
+  object-fit: cover;
+}
+
+/* .new-post__filter li img.claredon {
+  filter: saturate(2);
+} */
+
+/* --------------------- */
+
+.new-post.options {
+  grid-template-rows: min-content 10rem min-content;
+}
+
+.new-post__caption {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  border: 1px solid #dbdbdb;
+  border-top: none;
+  border-bottom: none;
+}
+
+.new-post__caption .post-avatar {
+  width: 4rem;
+  height: 3rem;
+  margin-top: 1.5rem;
+  margin-left: 2rem;
+}
+
+.new-post__caption .post-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.new-post__caption textarea {
+  resize: none;
+  border: none;
+  font-size: 1.5rem;
+  padding: 2rem 1rem;
+  width: 100%;
+  outline: none;
+  color: #262626;
+}
+
+.new-post__caption .post-preview {
+  display: flex;
+  align-items: center;
+  margin: 0 1rem;
+  width: 9rem;
+}
+
+.new-post__caption .post-preview img {
+  object-fit: cover;
+  height: 6rem;
+  /* width: auto; */
+  width: 100%;
+}
+
+.new-post__options {
+  border: 1px solid #dbdbdb;
+}
+
+.new-post__options button {
+  background-color: #fff;
+  border: none;
+  border-bottom: 1px solid #dbdbdb;
+  border-top: 1px solid #dbdbdb;
+  color: #262626;
+  height: 4.4rem;
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  outline: none;
+  cursor: pointer;
+}
+
+.new-post__options button span {
+  margin: 0 1.6rem;
+}
+
+.new-post__options p {
+  margin-top: 1.2rem;
+  color: #8e8e8e;
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-left: 1.6rem;
+  cursor: pointer;
+  padding-bottom: 2rem;
+}
+
+/* --------------------------- */
+
+.new-post.advanced {
+  display: block;
+}
+
+.new-post.advanced .new-post__header {
+  border: none;
+}
+
+.new-post.advanced h4 {
+  color: #262626;
+  font-weight: 600;
+  padding: 0 1.6rem;
+  margin-top: 2.4rem;
+}
+
+.new-post.advanced .new-post__options {
+  border: none;
+}
+
+.new-post.advanced .new-post__options button {
+  border: none;
+  background-color: transparent;
+}

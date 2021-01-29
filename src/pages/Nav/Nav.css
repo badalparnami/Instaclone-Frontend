@@ -1,0 +1,147 @@
+header {
+  height: 5.4rem;
+  background-color: #fff;
+  border-bottom: 1px solid #dbdbdb;
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  top: 0;
+  display: flex;
+  justify-content: center;
+}
+
+header .header-content {
+  height: 5.4rem;
+  padding: 0 2rem;
+  max-width: 97.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-content .header-logo {
+  background-image: url("./insta-logo-small.png");
+  background-repeat: no-repeat;
+  height: 3.1rem;
+  width: 11.1rem;
+}
+
+.header-content form {
+  position: relative;
+  font-size: 1.2rem;
+}
+
+.header-content form input {
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  padding: 5px 3rem;
+  background-color: #fafafa;
+  width: 100%;
+  text-align: center;
+  color: #999;
+  outline: none;
+}
+
+.header-content form input:valid,
+.header-content form input:focus {
+  text-align: unset;
+}
+
+.header-content form span {
+  background-image: url("./insta-searchicon.png");
+  background-repeat: no-repeat;
+  width: 1.4rem;
+  height: 1.4rem;
+
+  position: absolute;
+  left: 36%;
+  top: 50%;
+  transform: translate(-36%, -50%);
+  color: #999;
+}
+
+.header-content form input:valid + span,
+.header-content form input:focus + span {
+  left: 5%;
+  transform: translate(-5%, -50%);
+}
+
+.header-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 20rem;
+}
+
+.activity-icon {
+  position: relative;
+}
+
+.header-icons .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 10; /* Sit on top */
+  /* padding-top: 20rem; Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(38, 38, 38, 0.7);
+}
+
+a.upload {
+  background-image: url("./camera-icon.png");
+  background-repeat: no-repeat;
+  width: 3rem;
+  height: 4rem;
+}
+
+.header-icons a.active svg[aria-label="Home"] path {
+  d: path(
+    "M45.5 48H30.1c-.8 0-1.5-.7-1.5-1.5V34.2c0-2.6-2.1-4.6-4.6-4.6s-4.6 2.1-4.6 4.6v12.3c0 .8-.7 1.5-1.5 1.5H2.5c-.8 0-1.5-.7-1.5-1.5V23c0-.4.2-.8.4-1.1L22.9.4c.6-.6 1.6-.6 2.1 0l21.5 21.5c.3.3.4.7.4 1.1v23.5c.1.8-.6 1.5-1.4 1.5z"
+  );
+}
+
+.header-icons a.active svg[aria-label="Find People"] path {
+  d: path(
+    "M24 0C10.8 0 0 10.8 0 24s10.8 24 24 24 24-10.8 24-24S37.2 0 24 0zm12.2 13.8l-7 14.8c-.1.3-.4.6-.7.7l-14.8 7c-.2.1-.4.1-.6.1-.4 0-.8-.2-1.1-.4-.4-.4-.6-1.1-.3-1.7l7-14.8c.1-.3.4-.6.7-.7l14.8-7c.6-.3 1.3-.2 1.7.3.5.4.6 1.1.3 1.7zm-15 7.4l-5 10.5 10.5-5-5.5-5.5z"
+  );
+}
+
+.header-icons a.active svg[aria-label="Activity Feed"] path {
+  d: path(
+    "M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"
+  );
+}
+
+.header-icons a.active svg[aria-label="Profile"] path {
+  d: path(
+    "M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm-50.22 116.82C218.45 151.39 236.28 144 256 144s37.39 7.44 50.11 20.94c12.89 13.68 19.16 32.06 17.68 51.82C320.83 256 290.43 288 256 288s-64.89-32-67.79-71.25c-1.47-19.92 4.79-38.36 17.57-51.93zM256 432a175.49 175.49 0 01-126-53.22 122.91 122.91 0 0135.14-33.44C190.63 329 222.89 320 256 320s65.37 9 90.83 25.34A122.87 122.87 0 01382 378.78 175.45 175.45 0 01256 432z"
+  );
+}
+
+.header-cta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 13rem;
+}
+
+.header-cta a button {
+  cursor: pointer;
+  outline: none;
+  background-color: #0095f6;
+  border: none;
+  color: #fff;
+  padding: 0.6rem 0.95rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+.header-cta a.signup button {
+  background-color: transparent;
+  color: #0095f6;
+}

@@ -1,0 +1,24 @@
+.not-found {
+  padding: 4rem;
+  padding-top: 8rem;
+}
+
+.not-found h2 {
+  text-align: center;
+  color: #262626;
+  font-weight: 600;
+  font-size: 2.2rem;
+  line-height: 2.6rem;
+}
+
+.not-found p {
+  margin: 3rem 0 2rem 0;
+  text-align: center;
+  font-weight: 400;
+}
+
+.not-found p a,
+.not-found p a:visited {
+  color: #00376b;
+  text-decoration: none;
+}

@@ -1,0 +1,154 @@
+.popup-card {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 100%;
+  filter: drop-shadow(0 0 3px #dbdbdb);
+  background-color: #fff;
+  min-width: 25rem;
+  cursor: auto;
+  top: 3.5rem;
+}
+
+.popup-card:before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2.5rem;
+  height: 1rem;
+  bottom: 100%;
+  background-color: #fff;
+  -webkit-clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  box-shadow: 0 0 30px 0 #999;
+}
+
+.popup-card ul {
+  list-style-type: none;
+  max-height: 30rem;
+  overflow-y: auto;
+  /* background-color: #fff; */
+}
+
+.popup-card .user-card {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.popup-card .user-card:hover {
+  background-color: #fafafa;
+}
+
+.popup-card .user-card img {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  border: 1px solid #dbdbdb;
+  margin-right: 1rem;
+}
+
+.popup-card .user-details {
+  max-width: 70%;
+  font-size: 1.4rem;
+}
+
+.popup-card .user-details p.username {
+  font-weight: 600;
+  color: #262626;
+}
+
+.popup-card .user-details p.name {
+  color: #999;
+}
+
+ul .user-container:not(:last-child) p.divider,
+.popup-card.profile-popup p.divider {
+  width: 80%;
+  height: 1px;
+  background-color: #dbdbdb;
+  margin: 0 auto;
+  color: #999;
+  font-size: 1.4rem;
+}
+
+/* ___________________ */
+
+.popup-card.noti {
+  width: 50rem;
+}
+
+.popup-card.noti,
+.popup-card.noti::before {
+  left: 80%;
+  transform: translateX(-80%);
+}
+
+ul .noti-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  line-height: 4rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.activityHeartIcon {
+  background-image: url("./notification-logo-heart.png");
+  background-repeat: no-repeat;
+  width: 6.6rem;
+  height: 6.5rem;
+  margin-bottom: 1rem;
+}
+
+.noti-empty h2,
+.noti-empty h3 {
+  /* margin-top: 1.6rem; */
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #262626;
+}
+
+/* ---------------------- */
+
+.popup-card.profile-popup svg {
+  margin: 0 1rem 0 0.5rem;
+}
+
+.popup-card.profile-popup a {
+  text-decoration: none;
+  color: #262626;
+  font-weight: 400;
+  font-size: 1.4rem;
+  padding: 1rem;
+}
+
+.popup-card.profile-popup p.divider {
+  width: 100%;
+}
+
+.popup-card.profile-popup button {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-weight: 400;
+  font-size: 1.4rem;
+  padding: 1rem;
+  padding-left: 2rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.popup-card.profile-popup button:hover {
+  background-color: #fafafa;
+}
+
+.popup-card.profile-popup,
+.popup-card.profile-popup::before {
+  left: 90%;
+  transform: translateX(-90%);
+}

@@ -1,0 +1,296 @@
+main.post-page {
+  padding-top: 8rem;
+  max-width: 93.5rem;
+  margin: 0 auto;
+  margin-bottom: 5rem;
+}
+
+.post-page .post-page-container {
+  /* border: 1px solid #dbdbdb; */
+  /* display: grid; */
+  /* grid-template-columns: minmax(25vw, 100%) 35rem;
+  grid-template-rows: 61rem; */
+  display: flex;
+  height: 61rem;
+}
+
+.post-page .post-page-container .post-image {
+  display: flex;
+  align-items: center;
+  /* justify-content: flex-end; */
+  height: 61rem;
+  border: 1px solid #dbdbdb;
+  border-right: none;
+  min-width: 35rem;
+  max-width: 58.5rem;
+}
+
+.post-page-container .post-image img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.post-page .post-details {
+  background-color: #fff;
+  display: grid;
+  grid-template-rows: min-content 1fr repeat(2, min-content);
+  width: 35rem;
+  border: 1px solid #dbdbdb;
+  border-left: none;
+}
+
+.post-page .post-details .post-header {
+  display: flex;
+  align-items: center;
+  padding: 1.6rem;
+  border-bottom: 1px solid #efefef;
+}
+
+.post-page .post-details a.user-avatar {
+  margin-right: 1.5rem;
+}
+
+.post-page .post-details a.user-avatar img {
+  border-radius: 100px;
+  border: 1px solid #dbdbdb;
+  width: 4rem;
+  height: 4rem;
+}
+
+.post-page .post-details a.username {
+  text-decoration: none;
+  color: #262626;
+  font-weight: 600;
+  font-size: 1.4rem;
+  padding: 2px;
+}
+
+.post-page .post-details .post-header span {
+  margin: 0 0.5rem;
+}
+
+.post-page .post-details .post-header button {
+  border: none;
+  outline: none;
+  color: #0095f6;
+  background: 0 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.33rem;
+}
+
+.post-page .post-details .post-header button.active {
+  color: #262626;
+  font-size: 1.4rem;
+}
+
+.post-page .post-details a.username:hover {
+  text-decoration: underline;
+}
+
+.post-header .post-header-options {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.post-page .post-details .post-comments {
+  border-bottom: 1px solid #efefef;
+  overflow-y: auto;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.post-page .post-details .post-comments::-webkit-scrollbar {
+  display: none;
+}
+
+.post-page .post-comments .post-comment {
+  padding: 1.6rem;
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+.post-page .post-comments div.post-comment.is-reply {
+  padding-top: 1rem;
+  margin-left: 5rem;
+}
+
+.post-page .post-comment.real .comment-details {
+  margin-right: 1rem;
+}
+
+.post-page .post-comment .comment-details p span {
+  font-size: 1.4rem;
+}
+
+.post-page .post-comment .comment-details .comment-stats {
+  display: flex;
+  margin-top: 1.6rem;
+  margin-bottom: 4px;
+  font-size: 1.2rem;
+  color: #8e8e8e;
+  font-weight: 600;
+}
+
+.post-page .post-comment .comment-details .comment-stats > * + * {
+  margin-left: 1.2rem;
+}
+
+.post-page .post-comment .comment-details p.time {
+  font-weight: 400;
+}
+
+.post-page .comment-stats button {
+  color: #8e8e8e;
+  background: 0 0;
+  border: 0;
+  cursor: pointer;
+}
+
+.post-page .comment-details p.view-reply {
+  display: flex;
+  align-items: center;
+  margin-top: 1.6rem;
+  color: #8e8e8e;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.post-page .comment-details p.view-reply span.dash {
+  height: 1px;
+  background-color: #999;
+  width: 2.5rem;
+  display: inline-block;
+  margin-right: 2rem;
+}
+
+.post-page .post-comment.real .comment-options {
+  margin-right: 0;
+  position: absolute;
+  /* height: 100%; */
+  /* top: 0; */
+  right: 15%;
+  transform: translateX(15%);
+  opacity: 0;
+  padding: 0 0.5rem;
+  background-color: #fff;
+  cursor: pointer;
+  color: #999;
+
+  height: 3rem;
+  width: 2rem;
+  padding-top: 0.8rem;
+}
+
+.post-page .post-comment.real .comment-options:hover {
+  opacity: 0.8;
+}
+
+.post-page .post-comment.real .comment-like {
+  cursor: pointer;
+  padding-top: 0.5rem;
+}
+
+.post-page .comment-like.active svg[aria-label="Like"] {
+  fill: #ed4956;
+}
+
+.post-page .comment-like.active svg[aria-label="Like"] path {
+  d: path(
+    "M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"
+  );
+}
+
+/* ************************** POST STATS ********************* */
+
+.post-page .post-details .post-stats {
+  padding: 1rem 1.6rem;
+  border-bottom: 1px solid #efefef;
+}
+
+/* ------POST CTA------- */
+
+.post-stats .post-cta {
+  display: flex;
+}
+
+.post-stats .post-cta > * {
+  cursor: pointer;
+}
+
+.post-stats .post-cta > * + * {
+  margin-left: 1.6rem;
+}
+
+.post-stats .post-cta > *:last-child {
+  margin-left: auto;
+}
+
+.post-cta__like.active svg path {
+  d: path(
+    "M34.6 3.1c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5s1.1-.2 1.6-.5c1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"
+  );
+}
+
+.post-cta__like.active svg {
+  fill: #ed4956;
+}
+
+.post-cta__save.active svg path {
+  d: path(
+    "M43.5 48c-.4 0-.8-.2-1.1-.4L24 28.9 5.6 47.6c-.4.4-1.1.6-1.6.3-.6-.2-1-.8-1-1.4v-45C3 .7 3.7 0 4.5 0h39c.8 0 1.5.7 1.5 1.5v45c0 .6-.4 1.2-.9 1.4-.2.1-.4.1-.6.1z"
+  );
+}
+
+/* --------------- */
+
+.post-page .post-stats p.like-count {
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin: 0.5rem 0;
+}
+
+.post-page .post-stats p.date {
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.2px;
+  color: #8e8e8e;
+  margin-top: 0.7rem;
+}
+
+.post-page .post-add_comment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+}
+
+.post-page .post-add_comment input {
+  width: 100%;
+  border: none;
+  background-color: #fff;
+  font-family: inherit;
+  outline: none;
+  font-size: 1.4rem;
+}
+
+.post-page .post-add_comment input:placeholder-shown + button {
+  opacity: 0.5;
+}
+
+.post-page .post-add_comment button {
+  color: #0095f6;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  font-family: inherit;
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+  outline: 0;
+}

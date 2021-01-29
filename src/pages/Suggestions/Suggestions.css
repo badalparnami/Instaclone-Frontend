@@ -1,0 +1,91 @@
+.suggestions-page.large {
+  padding-top: 8rem;
+  max-width: 60rem;
+  margin: 0 auto;
+  margin-bottom: 5rem;
+}
+
+.suggestions-page h1 {
+  font-weight: 600;
+  line-height: 2.4rem;
+  font-size: 1.4rem;
+  color: #8e8e8e;
+}
+
+.suggestions-page.large h1 {
+  font-size: 1.6rem;
+  color: #262626;
+}
+
+.suggestions-page.large .suggestions-card {
+  background-color: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  margin-top: 1.6rem;
+  padding: 0.8rem 0;
+}
+
+.suggestions-card .suggestion-card {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 0;
+  font-size: 1.4rem;
+}
+
+.suggestions-page.large .suggestions-card .suggestion-card {
+  padding: 0.8rem 1.6rem;
+}
+
+.suggestion-card a img {
+  border-radius: 50%;
+  border: 1px solid #dbdbdb;
+}
+
+.suggestions-page.large .suggestion-card a img {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  border: 1px solid #dbdbdb;
+}
+
+.suggestion-card .user-details {
+  line-height: 1.8rem;
+  align-self: flex-start;
+}
+
+.suggestions-page.large .suggestion-card .user-details {
+  margin-left: 1.2rem;
+}
+
+.suggestion-card .user-details a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #262626;
+  display: inline-block;
+}
+
+.suggestions-page.large .suggestion-card .user-details p {
+  color: #999999;
+  font-weight: 400;
+}
+
+.suggestion-card button {
+  margin-left: auto;
+  outline: none;
+  border: none;
+  padding: 0.5rem 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.suggestions-page.large .suggestion-card button {
+  background-color: #0095f6;
+  color: #fff;
+}
+
+.suggestions-page.large .suggestion-card button.active {
+  background-color: transparent;
+  border: 1px solid #dbdbdb;
+  color: #262626;
+}
