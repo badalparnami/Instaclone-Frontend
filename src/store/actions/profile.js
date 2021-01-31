@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logoutAsync } from "./auth";
 
 const getProfileDataStart = () => {
   return {
@@ -9,21 +10,7 @@ const getProfileDataStart = () => {
 const getProfileDataSuccess = (user) => {
   return {
     type: "GET_PROFILE_DATA_SUCCESS",
-    name: user.name,
-    email: user.email,
-    username: user.username,
-    avatar: user.avatar,
-    website: user.website,
-    bio: user.bio,
-    private: user.private,
-    manuallyApproveTag: user.manuallyApproveTag,
-    tag: user.tag,
-    mention: user.mention,
-    post: user.post,
-    follower: user.follower,
-    following: user.following,
-    isUsernameChangeAllowed: user.isUsernameChangeAllowed,
-    lastUsername: user.lastUsername,
+    data: { ...user },
   };
 };
 
@@ -59,7 +46,7 @@ export const getProfile = (token) => {
       .catch((err) => {
         if (err.response) {
           if (err.response.status === 401) {
-            dispatch(getProfieDataFail());
+            dispatch(logoutAsync(token));
           } else {
             dispatch(getProfieDataFail(err.response.data.message));
           }

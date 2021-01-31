@@ -74,6 +74,12 @@ const logout = () => {
   };
 };
 
+const unAuth = () => {
+  return {
+    type: "UNAUTH",
+  };
+};
+
 export const auth = (email, password, isLogin, username, name) => {
   return (dispatch) => {
     dispatch(authStart());
@@ -109,7 +115,8 @@ export const authCheckState = () => {
   return (dispatch) => {
     const token = localStorage.getItem("token");
     if (!token) {
-      dispatch(logout());
+      // dispatch(logout());
+      dispatch(unAuth());
     } else dispatch(authSuccess(token));
   };
 };

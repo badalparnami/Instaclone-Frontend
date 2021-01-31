@@ -1,62 +1,73 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+
 import Modal from "./Modal/Modal";
 
 import { updateProfile } from "../store/actions/profile";
+import useReq from "../hooks/useReq";
 
 const ProfilePopupUserCard = ({ username, name, relation }) => {
   const [relationship, setRelationship] = useState(relation);
   const [openPopup, setOpenPopup] = useState(false);
-  const [error, setError] = useState(null);
-  const [cleanup, setCleanup] = useState(false);
+  const [followingNum, setFollowingNum] = useState(0);
+  const [followNum, setFollowNum] = useState(0);
 
-  const { token } = useSelector((state) => state.auth);
-  const { following } = useSelector((state) => state.profile);
+  const { following, follower } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
+
+  const { requestData, response, clear } = useReq();
 
   const openPopupHandler = () => {
     setOpenPopup(!openPopup);
   };
 
   useEffect(() => {
-    if (cleanup) {
-      return () => dispatch(updateProfile({ following: following - 1 }));
+    if (followingNum !== 0) {
+      return () =>
+        dispatch(
+          updateProfile({
+            following: following + followingNum,
+          })
+        );
     }
-  }, [cleanup]);
+  }, [followingNum]);
+
+  useEffect(() => {
+    if (followNum !== 0) {
+      return () =>
+        dispatch(
+          updateProfile({
+            follower: follower + followNum,
+          })
+        );
+    }
+  }, [followNum]);
+
+  useEffect(() => {
+    if (response !== null) {
+      if (relationship === "Following") {
+        setFollowingNum((prev) => prev - 1);
+      } else if (
+        relationship === "Follow" &&
+        response.relation === "Following"
+      ) {
+        setFollowingNum((prev) => prev + 1);
+      } else if (relationship === "Approve") {
+        setFollowNum((prev) => prev + 1);
+      }
+      setRelationship(response.relation);
+      clear();
+    }
+  }, [response, relationship]);
 
   const changeRelation = () => {
-    let url = `${process.env.REACT_APP_BACKEND_URL}/user/follow`;
+    let url = `user/follow`;
 
     if (relationship === "Unblock") {
-      url`${process.env.REACT_APP_BACKEND_URL}/user/toggleBlock`;
+      url = `user/toggleBlock`;
     }
 
-    axios
-      .post(
-        url,
-        { username },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        if (relationship === "Following") {
-          setCleanup(true);
-        }
-        setRelationship(res.data.relation);
-      })
-      .catch((err) => {
-        if (err.response) {
-          setError(err.response.data.message);
-        } else if (err.request) {
-          setError("Slow Network Speed. Try Again later.");
-        } else {
-          setError("Oops!! Unusual error occurred");
-        }
-      });
+    requestData("post", url, { username });
   };
 
   return (
@@ -90,6 +101,7 @@ const ProfilePopupUserCard = ({ username, name, relation }) => {
           isUser={true}
           isOptions={true}
         >
+          <h4 className="unfollow-popup">Unfollow @{username}?</h4>
           <button className="red-option" onClick={changeRelation}>
             Unfollow
           </button>

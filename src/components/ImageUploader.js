@@ -54,7 +54,7 @@ const ImageUploader = ({ makeMeFalse, openPicker, redirect, setRedirect }) => {
       <Redirect
         to={{
           pathname: "/newpost",
-          state: { image: previewUrl },
+          state: { image: previewUrl, file },
         }}
       />
     );

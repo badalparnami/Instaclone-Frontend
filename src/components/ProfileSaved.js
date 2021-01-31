@@ -4,7 +4,12 @@ const ProfileSaved = () => {
   return (
     <div className="profile-display">
       <div className="profile-display-saved">
-        <img src="../images/saved-logo.png" height="72px" width="64px" alt="" />
+        <img
+          src={`${process.env.PUBLIC_URL}/images/saved-logo.png`}
+          height="72px"
+          width="64px"
+          alt=""
+        />
         <h1>Save</h1>
         <p>
           Save photos and videos that you want to see again. No one is notified,

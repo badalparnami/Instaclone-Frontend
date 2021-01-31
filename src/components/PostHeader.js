@@ -1,8 +1,91 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal/Modal";
+import useReq from "../hooks/useReq";
 
-const PostHeader = ({ isHome }) => {
+const PostHeader = ({
+  isHome,
+  username,
+  relation,
+  allowComment,
+  setAllowComment,
+  isArchived,
+  setIsArchived,
+  postId,
+  pendingTag,
+  tagged,
+}) => {
   const [openOptions, setOpenOptions] = useState(false);
+  const [openTagOptions, setOpenTagOptions] = useState(false);
+  const [pendingTagList, setPendingTagList] = useState(pendingTag); // approve or remove
+  const [taggedList, setTaggedList] = useState(tagged); // remove
+
+  const {
+    requestData: requestDataComment,
+    clear: clearComment,
+    response: responseComment,
+  } = useReq();
+
+  const {
+    requestData: requestDataArchive,
+    clear: clearArchive,
+    response: responseArchive,
+  } = useReq();
+
+  const {
+    requestData: requestDataPendingTag,
+    clear: clearPendingTag,
+    response: responsePendingTag,
+  } = useReq();
+
+  const {
+    requestData: requestDataRemoveTag,
+    clear: clearRemoveTag,
+    response: responseRemoveTag,
+  } = useReq();
+
+  useEffect(() => {
+    if (responseComment !== null) {
+      setAllowComment(!allowComment);
+      clearComment();
+    }
+  }, [responseComment]);
+
+  useEffect(() => {
+    if (responseArchive !== null) {
+      setIsArchived(!isArchived);
+      clearArchive();
+    }
+  }, [responseArchive]);
+
+  useEffect(() => {
+    if (responsePendingTag !== null) {
+      setPendingTagList(!pendingTagList);
+      clearPendingTag();
+    }
+  }, [responsePendingTag]);
+
+  useEffect(() => {
+    if (responseRemoveTag !== null) {
+      setTaggedList(!taggedList);
+      clearRemoveTag();
+    }
+  }, [responseRemoveTag]);
+
+  const toggleAllowCommentHandler = () => {
+    requestDataComment("post", `post/allowcomment`, { postId });
+  };
+
+  const toggleArchiveHandler = () => {
+    requestDataArchive("post", `post/togglearchive`, { postId });
+  };
+
+  const showPostInProfileHandler = () => {
+    requestDataPendingTag("post", "user/approveTag", { postId });
+  };
+
+  const removePostTagHandler = () => {
+    requestDataRemoveTag("post", "post/removetag", { postId, username });
+  };
 
   return (
     <div className="post-header">
@@ -14,12 +97,12 @@ const PostHeader = ({ isHome }) => {
         />
       </a>
       <a href="#" className="username">
-        virat.kohli
+        {username}
       </a>
-      {!isHome && (
+      {!isHome && relation !== "Creator" && (
         <>
           <span>•</span>
-          <button>Follow</button>
+          <button>{relation}</button>
         </>
       )}
       <div
@@ -59,9 +142,43 @@ const PostHeader = ({ isHome }) => {
       {openOptions && (
         <Modal onClick={setOpenOptions} isUser={true} isOptions={true}>
           {/* <button className="red-option">Unfollow</button> */}
-          <button>Go to post</button>
+          {isHome && <button>Go to post</button>}
           <button>Copy Link</button>
-          <button className="red-option">Delete post</button>
+          {relation === "Creator" && (
+            <button onClick={toggleArchiveHandler}>
+              {isArchived ? "Unarchive" : "Archive"}
+            </button>
+          )}
+          {relation === "Creator" && (
+            <button onClick={toggleAllowCommentHandler}>
+              {allowComment ? "Turn Off Comments" : "Turn On Comments"}
+            </button>
+          )}
+          {(taggedList || pendingTagList) && (
+            <button onClick={() => setOpenTagOptions(!openTagOptions)}>
+              Tag Options
+            </button>
+          )}
+          {relation === "Creator" && (
+            <button className="red-option">Delete post</button>
+          )}
+        </Modal>
+      )}
+      {openTagOptions && (
+        <Modal
+          onClick={setOpenTagOptions}
+          isUser={true}
+          isOptions={true}
+          closeOnClick={true}
+        >
+          <button className="red-option" onClick={removePostTagHandler}>
+            Remove Me From Post
+          </button>
+          {pendingTagList && (
+            <button onClick={showPostInProfileHandler}>
+              Show in My Profile
+            </button>
+          )}
         </Modal>
       )}
     </div>

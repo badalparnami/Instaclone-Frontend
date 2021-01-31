@@ -49,6 +49,7 @@ main.post-page {
 
 .post-page .post-details a.user-avatar {
   margin-right: 1.5rem;
+  display: flex; /* remove if.... */
 }
 
 .post-page .post-details a.user-avatar img {

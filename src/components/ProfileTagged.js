@@ -5,7 +5,7 @@ const ProfileTagged = () => {
     <div className="profile-display">
       <div className="profile-display-tagged">
         <img
-          src="../images/tagged-logo.png"
+          src={`${process.env.PUBLIC_URL}/images/tagged-logo.png`}
           alt=""
           height="72px"
           width="64px"

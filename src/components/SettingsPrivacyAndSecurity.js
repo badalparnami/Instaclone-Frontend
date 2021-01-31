@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import { useDispatch } from "react-redux";
 
 import SettingsFormGroup from "./SettingsFormGroup";
 import { updateProfile } from "../store/actions/profile";
-import { logoutAsync } from "../store/actions/auth";
+import useReq from "../hooks/useReq";
 
 const SettingsPrivacyAndSecurity = ({
   manuallyApproveTag,
@@ -18,10 +17,10 @@ const SettingsPrivacyAndSecurity = ({
   );
   const [allowtag, setAllowTag] = useState(tag);
   const [allowMention, setAllowMention] = useState(mention);
-  const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.auth);
+  const { requestData, response, clear } = useReq();
+  const [updates, setUpdates] = useState(null);
 
   useEffect(() => {
     if (isPrivateAcc !== privateP && isPrivateAcc !== null) {
@@ -67,31 +66,16 @@ const SettingsPrivacyAndSecurity = ({
     dispatch,
   ]);
 
+  useEffect(() => {
+    if (response !== null) {
+      dispatch(updateProfile(updates));
+      clear();
+    }
+  }, [response, updates]);
+
   const updateProfileSettings = (security, updates) => {
-    axios
-      .post(
-        `${process.env.REACT_APP_BACKEND_URL}/user/security`,
-        { security: security },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => dispatch(updateProfile(updates)))
-      .catch((err) => {
-        if (err.response) {
-          if (err.response.status === 401) {
-            dispatch(logoutAsync(token));
-          } else {
-            setError(err.response.data.message);
-          }
-        } else if (err.request) {
-          setError("Slow Network Speed. Try Again later.");
-        } else {
-          setError("Oops!! Unusual error occurred");
-        }
-      });
+    requestData("post", "user/security", { security });
+    setUpdates(updates);
   };
 
   return (

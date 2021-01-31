@@ -16,6 +16,13 @@ const initialState = {
   following: null,
   isUsernameChangeAllowed: null,
   lastUsername: null,
+  likeCount: null,
+  savedCount: null,
+  blockedCount: null,
+  pendingFollowerCount: null,
+  archivePostCount: null,
+  taggedPostCount: null,
+  pendingTaggedPostCount: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -31,21 +38,7 @@ const authReducer = (state = initialState, action) => {
         ...state,
         error: null,
         loading: false,
-        name: action.name,
-        email: action.email,
-        username: action.username,
-        avatar: action.avatar,
-        website: action.website,
-        bio: action.bio,
-        private: action.private,
-        manuallyApproveTag: action.manuallyApproveTag,
-        tag: action.tag,
-        mention: action.mention,
-        post: action.post,
-        follower: action.follower,
-        following: action.following,
-        isUsernameChangeAllowed: action.isUsernameChangeAllowed,
-        lastUsername: action.lastUsername,
+        ...action.data,
       };
     case "GET_PROFILE_DATA_FAIL":
       return {

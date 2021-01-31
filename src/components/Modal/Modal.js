@@ -56,7 +56,6 @@ const Modal = ({
             <button
               onClick={() => {
                 onClick(false);
-                root.style.overflow = "auto";
                 !closeOnClick && (root.style.overflow = "auto");
               }}
             >

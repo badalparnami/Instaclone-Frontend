@@ -48,10 +48,14 @@ const Settings = ({ page }) => {
             emailP={profileData.email}
             lastUsername={profileData.lastUsername}
             isUsernameChangeAllowed={profileData.isUsernameChangeAllowed}
+            avatar={profileData.avatar}
           />
         )}
         {page === "password" && (
-          <SettingsPassword username={profileData.username} />
+          <SettingsPassword
+            username={profileData.username}
+            avatar={profileData.avatar}
+          />
         )}
         {page === "privacy" && (
           <SettingsPrivacyAndSecurity

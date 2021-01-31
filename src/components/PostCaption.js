@@ -1,6 +1,6 @@
 import React from "react";
 
-const PostCaption = ({ isHome }) => {
+const PostCaption = ({ isHome, username, caption }) => {
   return (
     <div className="post-comment">
       {!isHome && (
@@ -15,12 +15,9 @@ const PostCaption = ({ isHome }) => {
       <div className="comment-details">
         <p>
           <a href="#" className="username">
-            virat.kohli
+            {username}
           </a>
-          <span>
-            WHAT A WIN!!! Well done to all the boys and the management. Enjoy
-            this historic feat lads. Cheers 👏🏼🇮🇳
-          </span>
+          <span>{caption}</span>
         </p>
         {!isHome && (
           <div className="comment-stats">

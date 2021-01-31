@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
 
 import SettingsFormGroup from "./SettingsFormGroup";
-import { logoutAsync } from "../store/actions/auth";
+import useReq from "../hooks/useReq";
 
-const SettingsPassword = ({ username }) => {
+const SettingsPassword = ({ username, avatar }) => {
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirmNewPass, setConfirmNewPass] = useState("");
-  const [error, setError] = useState(null);
-  const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.auth);
+
+  const { setError, requestData, response, clear } = useReq();
+
+  useEffect(() => {
+    if (response !== null) {
+      setConfirmNewPass("");
+      setNewPass("");
+      setOldPass("");
+      clear();
+    }
+  }, [response]);
 
   const onSubmitHandler = (e) => {
     setError(null);
@@ -32,38 +38,11 @@ const SettingsPassword = ({ username }) => {
       return;
     }
 
-    axios
-      .post(
-        `${process.env.REACT_APP_BACKEND_URL}/user/password`,
-        {
-          pass: oldPass,
-          newPass,
-          confirmNewPass,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        setNewPass("");
-        setConfirmNewPass("");
-        setOldPass("");
-      })
-      .catch((err) => {
-        if (err.response) {
-          if (err.response.status === 401) {
-            dispatch(logoutAsync(token));
-          } else {
-            setError(err.response.data.message);
-          }
-        } else if (err.request) {
-          setError("Slow Network Speed. Try Again later.");
-        } else {
-          setError("Oops!! Unusual error occurred");
-        }
-      });
+    requestData("post", "user/password", {
+      pass: oldPass,
+      newPass,
+      confirmNewPass,
+    });
   };
 
   return (
@@ -71,10 +50,15 @@ const SettingsPassword = ({ username }) => {
       <div className="img-container">
         <div className="img">
           <img
-            src="../../images/default-avatar290.jpg"
+            src={
+              avatar
+                ? avatar
+                : `${process.env.PUBLIC_URL}/images/default-avatar290.jpg`
+            }
             alt=""
             width="100%"
             height="100%"
+            style={{ borderRadius: "100%" }}
           />
         </div>
         <div className="settings_username">

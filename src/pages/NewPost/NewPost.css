@@ -86,8 +86,6 @@
   background-repeat: no-repeat;
   width: 100%;
   height: 100%;
-  width: 100%;
-  height: 100%;
   background-size: contain;
   display: block;
 }
@@ -205,7 +203,16 @@
   cursor: pointer;
 }
 
-.new-post__options button span {
+.new-post.options .new-post__options button {
+  display: grid;
+  grid-template-columns: 1fr max-content min-content;
+}
+
+.new-post.options .new-post__options button span:nth-of-type(1) {
+  justify-self: start;
+}
+
+.new-post__options button > * {
   margin: 0 1.6rem;
 }
 
@@ -243,4 +250,159 @@
 .new-post.advanced .new-post__options button {
   border: none;
   background-color: transparent;
+}
+
+/* --------------------------------------- */
+
+.new-post.tag .popup-card {
+  filter: unset;
+}
+
+.new-post.tag .popup-card::before {
+  content: unset;
+}
+
+.new-post.tag .new-post__header button:nth-of-type(2) {
+  color: #0095f6;
+  justify-self: flex-end;
+  font-weight: 600;
+}
+
+.new-post.tag form {
+  position: relative;
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.new-post.tag form input {
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  padding: 5px 3rem;
+  background-color: #fafafa;
+  width: 40%;
+  text-align: center;
+  color: #999;
+  outline: none;
+}
+
+.new-post.tag form input:valid,
+.new-post.tag form input:focus {
+  text-align: unset;
+}
+
+.new-post.tag form span {
+  background-image: url("./insta-searchicon.png");
+  background-repeat: no-repeat;
+  width: 1.4rem;
+  height: 1.4rem;
+
+  position: absolute;
+  /* left: 36%; */
+  left: 45%;
+  top: 50%;
+  /* transform: translate(-36%, -50%); */
+  transform: translate(-45%, -50%);
+  color: #999;
+}
+
+.new-post.tag form input:valid + span,
+.new-post.tag form input:focus + span {
+  /* left: 5%; */
+  left: 32%;
+  /* transform: translate(-5%, -50%); */
+  transform: translate(-32%, -50%);
+}
+
+.new-post.tag .tagged-users {
+  padding: 2rem;
+}
+
+.new-post.tag .tagged-users > * {
+  margin: 0 1.2rem;
+  padding: 0.4rem 0.9rem;
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 4px;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  width: min-content;
+}
+
+.new-post.tag .tagged-users > * button {
+  height: 20px;
+  width: 20px;
+  margin-left: 1rem;
+  display: inline-block;
+  cursor: pointer;
+  background: transparent;
+  outline: none;
+  border: none;
+}
+
+.new-post.tag .tagged-users > * button span {
+  background-image: url("./delete-tag-icon.png");
+  height: 100%;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block;
+}
+
+/* ------------------------------------ */
+
+.switch-container input {
+  cursor: pointer;
+}
+
+.switch-container input[type="checkbox"].switch {
+  position: absolute;
+  opacity: 0;
+}
+
+.switch-container input[type="checkbox"].switch + div {
+  vertical-align: middle;
+  width: 47px;
+  /* height: 24px; */
+  height: 14px;
+  border-radius: 999px;
+  background-color: #ccc;
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  -webkit-transition-property: background-color, box-shadow;
+  transition-property: background-color, box-shadow;
+  cursor: pointer;
+}
+
+.switch-container input[type="checkbox"].switch:checked + div {
+  background-position: 0 0;
+  /* background-color: hsl(220, 98%, 61%); */
+  background-color: hsl(220, 98%, 75%);
+}
+
+.switch-container input[type="checkbox"].switch + div > div {
+  float: left;
+  width: 23px;
+  height: 23px;
+  border-radius: inherit;
+  /* background: #ffffff; */
+  background: #8e8e8e;
+  -webkit-transition-timing-function: cubic-bezier(1, 0, 0, 1);
+  transition-timing-function: cubic-bezier(1, 0, 0, 1);
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  -webkit-transition-property: transform, background-color;
+  transition-property: transform, background-color;
+  pointer-events: none;
+  /* margin-top: 1px; */
+  margin-top: -5px;
+  margin-left: 1px;
+}
+
+.switch-container input[type="checkbox"].switch:checked + div > div {
+  -webkit-transform: translate3d(23px, 0, 0);
+  transform: translate3d(23px, 0, 0);
+  /* background-color: #ffffff; */
+  background-color: hsl(220, 98%, 61%);
 }

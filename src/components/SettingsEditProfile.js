@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 import SettingsFormGroup from "./SettingsFormGroup";
-import { logoutAsync } from "../store/actions/auth";
 import { updateProfile } from "../store/actions/profile";
 import Modal from "./Modal/Modal";
+import useReq from "../hooks/useReq";
+import AvatarUploader from "./AvatarUploader";
 
 function validURL(str) {
   var pattern = new RegExp(
@@ -28,18 +28,42 @@ const SettingsEditProfile = ({
   emailP,
   lastUsername,
   isUsernameChangeAllowed,
+  avatar,
 }) => {
   const [name, setName] = useState(nameP);
   const [username, setUsername] = useState(usernameP);
   const [website, setWebsite] = useState(websiteP ? websiteP : "");
   const [bio, setBio] = useState(bioP ? bioP : "");
   const [email, setEmail] = useState(emailP);
+  const [openRevertModal, setOpenRevertModal] = useState(false);
+  const [updateObj, setUpdateObj] = useState(null);
 
-  const [error, setError] = useState(null);
-  const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  const [openRevertModal, setOpenRevertModal] = useState(false);
+  let updatesObj = {};
+  const { requestData, response, setError, clear } = useReq();
+  const {
+    requestData: requestData2,
+    response: response2,
+    clear: clear2,
+  } = useReq();
+
+  const [openPicker, setOpenPicker] = useState(false);
+  const [avatarOptions, setAvatarOptions] = useState(false);
+
+  useEffect(() => {
+    if (response !== null) {
+      dispatch(updateProfile(updateObj));
+      clear();
+    }
+  }, [response, updateObj]);
+
+  useEffect(() => {
+    if (response2 !== null) {
+      dispatch(updateProfile({ username: lastUsername, lastUsername: null }));
+      clear2();
+    }
+  }, [response2, lastUsername]);
 
   const onSubmitHandler = (e) => {
     setError(null);
@@ -53,12 +77,12 @@ const SettingsEditProfile = ({
       return;
     }
 
-    if (name.length < 3) {
+    if (name.trim().length < 3) {
       setError("Name should be of more than 3 characters");
       return;
     }
 
-    if (!/^[a-zA-Zs]+$/.test(name)) {
+    if (!/^[a-z]([a-z]+){2,}(\s[a-z]([a-z]+)*)?$/.test(name)) {
       setError("Only alphabets allowed in name");
       return;
     }
@@ -83,7 +107,6 @@ const SettingsEditProfile = ({
     }
 
     let updates = [];
-    let updatesObj = {};
     if (name !== nameP) {
       updates.push({ change: "name", value: name });
       updatesObj = { ...updatesObj, name };
@@ -94,16 +117,12 @@ const SettingsEditProfile = ({
       updatesObj = { ...updatesObj, username };
     }
 
-    if (
-      (website != undefined || website != null) &&
-      website.length > 1 &&
-      website !== websiteP
-    ) {
+    if (website !== websiteP) {
       updates.push({ change: "website", value: website });
       updatesObj = { ...updatesObj, website };
     }
 
-    if ((bio != undefined || bio != null) && bio.length > 1 && bio !== bioP) {
+    if (bio !== bioP) {
       updates.push({ change: "bio", value: bio });
       updatesObj = { ...updatesObj, bio };
     }
@@ -117,70 +136,15 @@ const SettingsEditProfile = ({
       return;
     }
 
-    axios
-      .post(
-        `${process.env.REACT_APP_BACKEND_URL}/user/profile`,
-        {
-          updates: updates,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((res) => {
-        if (res.data.error) {
-          setError(res.data.error);
-          dispatch(updateProfile(updatesObj));
-        }
-      })
-      .catch((err) => {
-        if (err.response) {
-          if (err.response.status === 401) {
-            dispatch(logoutAsync(token));
-          } else {
-            setError(err.response.data.message);
-          }
-        } else if (err.request) {
-          setError("Slow Network Speed. Try Again later.");
-        } else {
-          setError("Oops!! Unusual error occurred");
-        }
-      });
+    setUpdateObj(updatesObj);
+
+    requestData("post", "user/profile", { updates: updates });
   };
 
   const revertUsername = () => {
     setOpenRevertModal(false);
     if (lastUsername) {
-      axios
-        .post(`${process.env.REACT_APP_BACKEND_URL}/user/revert`, null, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          if (res.data.error) {
-            setError(res.data.error);
-          } else {
-            dispatch(
-              updateProfile({ username: lastUsername, lastUsername: null })
-            );
-          }
-        })
-        .catch((err) => {
-          if (err.response) {
-            if (err.response.status === 401) {
-              dispatch(logoutAsync(token));
-            } else {
-              setError(err.response.data.message);
-            }
-          } else if (err.request) {
-            setError("Slow Network Speed. Try Again later.");
-          } else {
-            setError("Oops!! Unusual error occurred");
-          }
-        });
+      requestData2("post", "user/revert");
     }
   };
 
@@ -188,18 +152,31 @@ const SettingsEditProfile = ({
     <div className="settings-content">
       <div className="img-container">
         <div className="img">
-          <button>
+          <button style={{ display: "flex" }}>
             <img
-              src="./../images/default-avatar290.jpg"
+              src={
+                avatar
+                  ? avatar
+                  : `${process.env.PUBLIC_URL}/images/default-avatar290.jpg`
+              }
               alt=""
               width="100%"
               height="100%"
+              onClick={() =>
+                avatar ? setAvatarOptions(true) : setOpenPicker(true)
+              }
             />
           </button>
         </div>
         <div className="settings_username">
           <h1>{usernameP}</h1>
-          <button>Change Profile Photo</button>
+          <button
+            onClick={() =>
+              avatar ? setAvatarOptions(true) : setOpenPicker(true)
+            }
+          >
+            Change Profile Photo
+          </button>
         </div>
       </div>
 
@@ -215,7 +192,7 @@ const SettingsEditProfile = ({
                 by: either your full name, nickname, or business name."
           extras={{
             title: "Only alphabets allowed",
-            pattern: "^[a-zA-Zs]+$",
+            // pattern: "^[a-z]([a-z]+){2,}(s[a-z]([a-z]+)*)?$",
             minLength: 3,
           }}
         />
@@ -279,6 +256,13 @@ const SettingsEditProfile = ({
           <button onClick={revertUsername}>Yes</button>
         </Modal>
       )}
+
+      <AvatarUploader
+        openPicker={openPicker}
+        makeMeFalse={setOpenPicker}
+        avatarOptions={avatarOptions}
+        setAvatarOptions={setAvatarOptions}
+      />
     </div>
   );
 };

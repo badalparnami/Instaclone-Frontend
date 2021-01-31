@@ -88,6 +88,11 @@
   font-weight: 700;
 }
 
+#myModal .modal-content .following-overview.options > button.blue-option {
+  color: #0095f6;
+  font-weight: 700;
+}
+
 .following-overview .no-following-icon {
   margin: 0 auto;
   width: 9.6rem;
@@ -106,6 +111,11 @@
 .following-overview h4 {
   font-weight: 400;
   font-size: 1.4rem;
+}
+
+.following-overview h4.unfollow-popup {
+  border-bottom: 1px solid #dbdbdb;
+  padding: 1.5rem;
 }
 
 .users.modal-content .following-overview {
