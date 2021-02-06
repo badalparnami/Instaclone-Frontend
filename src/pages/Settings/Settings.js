@@ -5,10 +5,11 @@ import { Redirect, NavLink } from "react-router-dom";
 import SettingsEditProfile from "../../components/SettingsEditProfile";
 import SettingsPassword from "../../components/SettingsPassword";
 import SettingsPrivacyAndSecurity from "../../components/SettingsPrivacyAndSecurity";
+import SettingsAccountData from "../../components/SettingsAccountData";
 
 import "./Settings.css";
 
-const Settings = ({ page }) => {
+const Settings = ({ page, subpage }) => {
   const { token } = useSelector((state) => state.auth);
   const profileData = useSelector((state) => state.profile);
   const [isTokenRendered, setIsTokenRendered] = useState(false);
@@ -36,6 +37,9 @@ const Settings = ({ page }) => {
             </NavLink>
             <NavLink to="/accounts/privacy_and_security">
               <li>Privacy and Security</li>
+            </NavLink>
+            <NavLink to="/accounts/data">
+              <li>Account Data</li>
             </NavLink>
           </ul>
         </div>
@@ -65,6 +69,7 @@ const Settings = ({ page }) => {
             mention={profileData.mention}
           />
         )}
+        {(page === "data" || subpage) && <SettingsAccountData page={subpage} />}
       </div>
     </div>
   );

@@ -1,20 +1,30 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
+import ProfilePopupUserCard from "./ProfilePopupUserCard";
 
-const SuggestionCard = () => {
+const SuggestionCard = ({ avatar, username, name, relation }) => {
   return (
     <div className="suggestion-card">
-      <a href="#" className="avatar">
+      <NavLink to={`/${username}`} className="avatar">
         <img
-          src="https://res.cloudinary.com/drwb19czo/image/upload/v1606365556/oee6lxiuot8wwaxk8r2h.jpg"
+          src={
+            avatar
+              ? avatar
+              : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+          }
           alt="Avatar"
         />
-      </a>
+      </NavLink>
       <div className="user-details">
-        <a href="#">Kajal</a>
-        <p>gunda raaj</p>
+        <NavLink to={`/${username}`}>{username}</NavLink>
+        <p>{name}</p>
       </div>
-      <button>Follow</button>
-      {/* className = "active" */}
+      <ProfilePopupUserCard
+        isPostHeader={true}
+        username={username}
+        relation={relation ? relation : "Follow"}
+      />
+      {/* className = "active" || changed to 'profile-following' */}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import SettingsFormGroup from "./SettingsFormGroup";
 import { updateProfile } from "../store/actions/profile";
 import useReq from "../hooks/useReq";
+import Modal from "./Modal/Modal";
 
 const SettingsPrivacyAndSecurity = ({
   manuallyApproveTag,
@@ -19,20 +20,27 @@ const SettingsPrivacyAndSecurity = ({
   const [allowMention, setAllowMention] = useState(mention);
 
   const dispatch = useDispatch();
-  const { requestData, response, clear } = useReq();
+  const { requestData, response, clear, alertHandler } = useReq();
   const [updates, setUpdates] = useState(null);
+
+  const [openOptionsPrivate, setOpenOptionsPrivate] = useState(false);
+  const [openOptionsUserTag, setOpenOptionsUserTag] = useState(false);
+
+  const root = document.body;
 
   useEffect(() => {
     if (isPrivateAcc !== privateP && isPrivateAcc !== null) {
+      if (privateP === true) {
+        setOpenOptionsPrivate(true);
+        return;
+      }
       updateProfileSettings(["private", isPrivateAcc], {
         private: isPrivateAcc,
       });
     }
 
     if (manuallyApproveTag && userTag !== "manually" && userTag !== null) {
-      updateProfileSettings(["manuallyApproveTag", false], {
-        manuallyApproveTag: false,
-      });
+      setOpenOptionsUserTag(true);
     }
 
     if (
@@ -63,11 +71,14 @@ const SettingsPrivacyAndSecurity = ({
     tag,
     manuallyApproveTag,
     mention,
-    dispatch,
   ]);
 
   useEffect(() => {
     if (response !== null) {
+      alertHandler("Settings saved");
+      root.style.overflow = "auto";
+      setOpenOptionsPrivate(false);
+      setOpenOptionsUserTag(false);
       dispatch(updateProfile(updates));
       clear();
     }
@@ -76,6 +87,28 @@ const SettingsPrivacyAndSecurity = ({
   const updateProfileSettings = (security, updates) => {
     requestData("post", "user/security", { security });
     setUpdates(updates);
+  };
+
+  const privateAccHandler = () => {
+    updateProfileSettings(["private", isPrivateAcc], {
+      private: isPrivateAcc,
+    });
+  };
+
+  const userTagHandler = () => {
+    updateProfileSettings(["manuallyApproveTag", false], {
+      manuallyApproveTag: false,
+    });
+  };
+
+  const revertPrivateState = () => {
+    setOpenOptionsPrivate(false);
+    setIsPrivateAcc(privateP);
+  };
+
+  const revertUserTagState = () => {
+    setOpenOptionsUserTag(false);
+    setUserTag(manuallyApproveTag ? "manually" : "automatically");
   };
 
   return (
@@ -136,6 +169,32 @@ const SettingsPrivacyAndSecurity = ({
           they'll see if you don't allow @mentions."
         />
       </form>
+
+      {openOptionsPrivate && (
+        <Modal onClick={revertPrivateState} isUser={true} isOptions={true}>
+          <h4 className="unfollow-popup">
+            <b>Change Privacy?</b> <br /> <br /> Anyone will be able to see your
+            photos. You will no longer need to approve followers and all your
+            pending followers (if any) will be automatically converted to your
+            followers.
+          </h4>
+          <button onClick={privateAccHandler} className="blue-option">
+            Okay
+          </button>
+        </Modal>
+      )}
+
+      {openOptionsUserTag && (
+        <Modal onClick={revertUserTagState} isUser={true} isOptions={true}>
+          <h4 className="unfollow-popup">
+            All your pending tagged post (if any) will be automatically
+            approved.
+          </h4>
+          <button onClick={userTagHandler} className="blue-option">
+            Okay
+          </button>
+        </Modal>
+      )}
     </div>
   );
 };

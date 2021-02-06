@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import "../Activity/Activity.css";
 
 import SearchUserCard from "../../components/SearchUserCard";
 import useReq from "../../hooks/useReq";
 
-const Search = ({ value, onClick }) => {
+const Search = ({ value, onClick, closeMe }) => {
   const { requestData, response, clear } = useReq();
+  const history = useHistory();
 
   useEffect(() => {
     const delaySearch = setTimeout(() => {
@@ -21,6 +23,11 @@ const Search = ({ value, onClick }) => {
     return () => clearTimeout(delaySearch);
   }, [value]);
 
+  const redirectToProfile = (username) => {
+    history.push(`/${username}`);
+    closeMe("");
+  };
+
   return (
     <div className="popup-card">
       {response && (
@@ -30,8 +37,11 @@ const Search = ({ value, onClick }) => {
               username={u.username}
               name={u.name}
               key={u.username}
-              onClick={onClick}
+              onClick={onClick || redirectToProfile}
               avatar={u.avatar}
+              mention={u.mention}
+              tag={u.tag}
+              relation={u.relation}
             />
           ))}
         </ul>

@@ -1,17 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import "./Post.css";
 
 import PostCTA from "../../components/PostCTA";
 import PostCaption from "../../components/PostCaption";
-import PostComment from "../../components/PostComment";
 import PostAddComment from "../../components/PostAddComment";
 import PostHeader from "../../components/PostHeader";
 import useReq from "../../hooks/useReq";
+import PostCommentMain from "./PostCommentMain";
+import { formatDatePost } from "../../utils/date";
+import LoginModal from "../../components/LoginModal";
 
 const Post = (props) => {
   const { loggedIn } = useSelector((state) => state.auth);
+  const profileData = useSelector((state) => state.profile);
   const { requestData, response, clear } = useReq();
+  const {
+    requestData: requestDataCommments,
+    response: responseComments,
+    clear: clearComments,
+  } = useReq();
 
   const [updatedState, setUpdatedState] = useState(false);
   const [allowComment, setAllowComment] = useState(false);
@@ -19,12 +27,16 @@ const Post = (props) => {
   const [likeCount, setLikeCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [postComments, setPostComments] = useState([]);
+  const [current, setCurrent] = useState(1);
+  const [openLoginModal, setOpenLoginModal] = useState(false);
+
+  const commentRef = useRef();
+  const likeRef = useRef();
 
   useEffect(() => {
     if (loggedIn !== undefined) {
-      clear();
-      setUpdatedState(false);
-      requestData("get", `post/detail/${props.match.params.id}`);
+      fetchData();
     }
   }, [loggedIn]);
 
@@ -35,13 +47,59 @@ const Post = (props) => {
       setLikeCount(response.postDetails.likeCount);
       setIsLiked(response.postDetails.isLiked);
       setIsSaved(response.postDetails.isSaved);
+      setPostComments(response.postDetails.comment);
       setUpdatedState(true);
     }
   }, [response, updatedState]);
 
+  useEffect(() => {
+    if (responseComments !== null) {
+      setPostComments([...postComments, ...responseComments.details]);
+      setCurrent((prev) => prev + 1);
+      clearComments();
+    }
+  }, [responseComments]);
+
+  const fetchData = () => {
+    clear();
+    setUpdatedState(false);
+    requestData("get", `post/detail/${props.match.params.id}`);
+  };
+
+  const addPostComment = (id, text, date) => {
+    setPostComments((prev) => [
+      ...prev,
+      {
+        avatar: profileData.avatar,
+        id,
+        isLiked: false,
+        likeCount: 0,
+        replyCount: 0,
+        text,
+        date,
+        username: profileData.username,
+      },
+    ]);
+  };
+
+  const deleteComment = (id) => {
+    setPostComments((prev) => prev.filter((c) => c.id != id));
+  };
+
+  const moreCommentsHandler = () => {
+    if (!loggedIn) {
+      setOpenLoginModal(true);
+      return;
+    }
+    requestDataCommments(
+      "get",
+      `comment/get/${props.match.params.id}/${current}`
+    );
+  };
+
   return (
     <main className="post-page">
-      {response && (
+      {response && updatedState && (
         <div className="post-page-container">
           <div className="post-image">
             <img
@@ -61,201 +119,46 @@ const Post = (props) => {
               postId={props.match.params.id}
               pendingTag={response.postDetails.isInPendingTagged}
               tagged={response.postDetails.isInTaggedList}
+              fetchData={fetchData}
+              isPrivate={response.private}
+              avatar={response.postDetails.avatar}
             />
             <div className="post-comments">
               {response.postDetails.caption && (
                 <PostCaption
                   caption={response.postDetails.caption}
                   username={response.postDetails.creatorUsername}
+                  date={response.postDetails.date}
+                  avatar={response.postDetails.avatar}
                 />
               )}
-              <PostComment />
 
-              <div className="post-comment real">
-                <a className="user-avatar" href="">
-                  <img
-                    alt="virat.kohli's profilePicture"
-                    draggable="false"
-                    src="https://instagram.fdel11-1.fna.fbcdn.net/v/t51.2885-19/s150x150/120097897_172397281086637_5031602793879746188_n.jpg?_nc_ht=instagram.fdel11-1.fna.fbcdn.net&amp;_nc_ohc=dBwUjVtwxNUAX-1aZEw&amp;tp=1&amp;oh=c49552f8616605bbce2acd9a255560ff&amp;oe=6032E336"
-                  />
-                </a>
-                <div className="comment-details">
-                  <p>
-                    <a href="#" className="username">
-                      virat.kohli
-                    </a>
-                    <span>
-                      WHAT A WIN!!! Well done to all the boys and the
-                      management. Enjoy this historic feat lads. Cheers 👏🏼🇮🇳
-                    </span>
-                  </p>
-                  <div className="comment-stats">
-                    <p className="time">1d</p>
-                    <p className="like-details">1 like</p>
-                    <button>Reply</button>
-                  </div>
-                  <p className="view-reply">
-                    <span className="dash large"></span>
-                    View replies (7)
-                  </p>
+              {postComments.map((c) => (
+                <PostCommentMain
+                  avatar={c.avatar}
+                  commentReplyCount={c.replyCount}
+                  isCommentLiked={c.isLiked}
+                  likeCount={c.likeCount}
+                  text={c.text}
+                  username={c.username}
+                  key={c.id}
+                  id={c.id}
+                  date={c.date}
+                  commentRef={commentRef}
+                  isCreator={c.username === profileData.username}
+                  deleteCommentMain={deleteComment}
+                  allowComment={allowComment}
+                />
+              ))}
+
+              {response.postDetails.totalComments > postComments.length && (
+                <div onClick={moreCommentsHandler} className="more-comments">
+                  <span></span>
                 </div>
-                <div className="comment-like">
-                  <svg
-                    aria-label="Like"
-                    fill="#262626"
-                    height="12"
-                    viewBox="0 0 48 48"
-                    width="12"
-                  >
-                    <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-                  </svg>
-                </div>
-              </div>
-              <div className="post-comment real">
-                <a className="user-avatar" href="">
-                  <img
-                    alt="virat.kohli's profilePicture"
-                    draggable="false"
-                    src="https://instagram.fdel11-1.fna.fbcdn.net/v/t51.2885-19/s150x150/120097897_172397281086637_5031602793879746188_n.jpg?_nc_ht=instagram.fdel11-1.fna.fbcdn.net&amp;_nc_ohc=dBwUjVtwxNUAX-1aZEw&amp;tp=1&amp;oh=c49552f8616605bbce2acd9a255560ff&amp;oe=6032E336"
-                  />
-                </a>
-                <div className="comment-details">
-                  <p>
-                    <a href="#" className="username">
-                      virat.kohli
-                    </a>
-                    <span>
-                      WHAT A WIN!!! Well done to all the boys and the
-                      management. Enjoy this historic feat lads. Cheers 👏🏼🇮🇳
-                    </span>
-                  </p>
-                  <div className="comment-stats">
-                    <p className="time">1d</p>
-                    <p className="like-details">1 like</p>
-                    <button>Reply</button>
-                  </div>
-                  <p className="view-reply">
-                    <span className="dash large"></span>
-                    Hide replies
-                  </p>
-                </div>
-                <div className="comment-like">
-                  <svg
-                    aria-label="Like"
-                    fill="#262626"
-                    height="12"
-                    viewBox="0 0 48 48"
-                    width="12"
-                  >
-                    <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-                  </svg>
-                </div>
-              </div>
-              <PostComment isReply={true} />
-              <div className="post-comment real is-reply">
-                <a className="user-avatar" href="">
-                  <img
-                    alt="virat.kohli's profilePicture"
-                    draggable="false"
-                    src="https://instagram.fdel11-1.fna.fbcdn.net/v/t51.2885-19/s150x150/120097897_172397281086637_5031602793879746188_n.jpg?_nc_ht=instagram.fdel11-1.fna.fbcdn.net&amp;_nc_ohc=dBwUjVtwxNUAX-1aZEw&amp;tp=1&amp;oh=c49552f8616605bbce2acd9a255560ff&amp;oe=6032E336"
-                  />
-                </a>
-                <div className="comment-details">
-                  <p>
-                    <a href="#" className="username">
-                      virat.kohli
-                    </a>
-                    <span>
-                      WHAT A WIN!!! Well done to all the boys and the
-                      management. Enjoy this historic feat lads. Cheers 👏🏼🇮🇳
-                    </span>
-                  </p>
-                  <div className="comment-stats">
-                    <p className="time">1d</p>
-                    <p className="like-details">1 like</p>
-                    <button>Reply</button>
-                  </div>
-                </div>
-                <div className="comment-like">
-                  <svg
-                    aria-label="Like"
-                    fill="#262626"
-                    height="12"
-                    viewBox="0 0 48 48"
-                    width="12"
-                  >
-                    <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-                  </svg>
-                </div>
-              </div>
-              <div className="post-comment real">
-                <a className="user-avatar" href="">
-                  <img
-                    alt="virat.kohli's profilePicture"
-                    draggable="false"
-                    src="https://instagram.fdel11-1.fna.fbcdn.net/v/t51.2885-19/s150x150/120097897_172397281086637_5031602793879746188_n.jpg?_nc_ht=instagram.fdel11-1.fna.fbcdn.net&amp;_nc_ohc=dBwUjVtwxNUAX-1aZEw&amp;tp=1&amp;oh=c49552f8616605bbce2acd9a255560ff&amp;oe=6032E336"
-                  />
-                </a>
-                <div className="comment-details">
-                  <p>
-                    <a href="#" className="username">
-                      virat.kohli
-                    </a>
-                    <span>
-                      WHAT A WIN!!! Well done to all the boys and the
-                      management. Enjoy this historic feat lads. Cheers 👏🏼🇮🇳
-                    </span>
-                  </p>
-                  <div className="comment-stats">
-                    <p className="time">1d</p>
-                    <p className="like-details">1 like</p>
-                    <button>Reply</button>
-                  </div>
-                </div>
-                <div className="comment-options">
-                  <svg
-                    aria-label="Comment Options"
-                    className="_8-yf5"
-                    fill="#8e8e8e"
-                    height="16"
-                    viewBox="0 0 48 48"
-                    width="16"
-                  >
-                    <circle
-                      clipRule="evenodd"
-                      cx="8"
-                      cy="24"
-                      fillRule="evenodd"
-                      r="4.5"
-                    ></circle>
-                    <circle
-                      clipRule="evenodd"
-                      cx="24"
-                      cy="24"
-                      fillRule="evenodd"
-                      r="4.5"
-                    ></circle>
-                    <circle
-                      clipRule="evenodd"
-                      cx="40"
-                      cy="24"
-                      fillRule="evenodd"
-                      r="4.5"
-                    ></circle>
-                  </svg>
-                </div>
-                <div className="comment-like">
-                  <svg
-                    aria-label="Like"
-                    fill="#262626"
-                    height="12"
-                    viewBox="0 0 48 48"
-                    width="12"
-                  >
-                    <path d="M34.6 6.1c5.7 0 10.4 5.2 10.4 11.5 0 6.8-5.9 11-11.5 16S25 41.3 24 41.9c-1.1-.7-4.7-4-9.5-8.3-5.7-5-11.5-9.2-11.5-16C3 11.3 7.7 6.1 13.4 6.1c4.2 0 6.5 2 8.1 4.3 1.9 2.6 2.2 3.9 2.5 3.9.3 0 .6-1.3 2.5-3.9 1.6-2.3 3.9-4.3 8.1-4.3m0-3c-4.5 0-7.9 1.8-10.6 5.6-2.7-3.7-6.1-5.5-10.6-5.5C6 3.1 0 9.6 0 17.6c0 7.3 5.4 12 10.6 16.5.6.5 1.3 1.1 1.9 1.7l2.3 2c4.4 3.9 6.6 5.9 7.6 6.5.5.3 1.1.5 1.6.5.6 0 1.1-.2 1.6-.5 1-.6 2.8-2.2 7.8-6.8l2-1.8c.7-.6 1.3-1.2 2-1.7C42.7 29.6 48 25 48 17.6c0-8-6-14.5-13.4-14.5z"></path>
-                  </svg>
-                </div>
-              </div>
+              )}
+              {/* <PostComment />
+
+              <PostComment isReply={true} /> */}
             </div>
 
             <div className="post-stats">
@@ -266,21 +169,44 @@ const Post = (props) => {
                 setIsSaved={setIsSaved}
                 postId={props.match.params.id}
                 setLikeCount={setLikeCount}
+                commentRef={commentRef}
+                likeRef={likeRef}
+                allowComment={allowComment}
               />
-              {likeCount > 0 && (
+              {likeCount > 0 ? (
                 <p className="like-count">
                   {likeCount}
                   {likeCount > 1 ? " likes" : " like"}
                 </p>
+              ) : (
+                <p className="like-count" style={{ fontWeight: 400 }}>
+                  Be the first to{" "}
+                  <b
+                    onClick={() => likeRef.current.click()}
+                    style={{ cursor: "pointer", fontWeight: 500 }}
+                  >
+                    like this
+                  </b>
+                </p>
               )}
 
-              <p className="date">January 6</p>
+              {/* <p className="date">January 6</p> */}
+              <p className="date">
+                {formatDatePost(response.postDetails.date)}
+              </p>
             </div>
 
-            <PostAddComment />
+            {allowComment && (
+              <PostAddComment
+                postId={props.match.params.id}
+                ref={commentRef}
+                addPostComment={addPostComment}
+              />
+            )}
           </div>
         </div>
       )}
+      {openLoginModal && <LoginModal setModal={setOpenLoginModal} />}
     </main>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProfileTagged = () => {
+const ProfileTagged = ({ isUser }) => {
   return (
     <div className="profile-display">
       <div className="profile-display-tagged">
@@ -10,8 +10,8 @@ const ProfileTagged = () => {
           height="72px"
           width="64px"
         />
-        <h1>Photos of you</h1>
-        <p>When people tag you in photos, they'll appear here.</p>
+        <h1>{!isUser ? "Photos of you" : "No Photos"}</h1>
+        {!isUser && <p>When people tag you in photos, they'll appear here.</p>}
       </div>
     </div>
   );

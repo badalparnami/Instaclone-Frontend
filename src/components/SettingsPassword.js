@@ -2,22 +2,38 @@ import React, { useState, useEffect } from "react";
 
 import SettingsFormGroup from "./SettingsFormGroup";
 import useReq from "../hooks/useReq";
+import Loader from "./Loader/Loader";
 
 const SettingsPassword = ({ username, avatar }) => {
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
   const [confirmNewPass, setConfirmNewPass] = useState("");
 
-  const { setError, requestData, response, clear } = useReq();
+  const {
+    setError,
+    requestData,
+    response,
+    clear,
+    error,
+    alertHandler,
+    loading,
+  } = useReq();
 
   useEffect(() => {
     if (response !== null) {
+      alertHandler("Password changed.");
       setConfirmNewPass("");
       setNewPass("");
       setOldPass("");
       clear();
     }
   }, [response]);
+
+  useEffect(() => {
+    if (error !== null) {
+      alertHandler(error);
+    }
+  }, [error]);
 
   const onSubmitHandler = (e) => {
     setError(null);
@@ -34,7 +50,7 @@ const SettingsPassword = ({ username, avatar }) => {
     }
 
     if (newPass !== confirmNewPass) {
-      setError("New Password and Confirm new password doesn't match");
+      setError("Please make sure both passwords match.");
       return;
     }
 
@@ -113,7 +129,9 @@ const SettingsPassword = ({ username, avatar }) => {
         />
 
         <SettingsFormGroup>
-          <button>Change Password</button>
+          <button disabled={loading}>
+            Change Password {loading && <Loader />}
+          </button>
         </SettingsFormGroup>
       </form>
     </div>

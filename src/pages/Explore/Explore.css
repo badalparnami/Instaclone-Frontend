@@ -28,6 +28,7 @@ main.explore-page > :nth-child(18n + 10) {
   cursor: pointer;
   height: 100%;
   /* height: 29.3rem; */
+  background-color: #eee;
 }
 
 .profile-images .profile-image:hover .profile-image__overlay {

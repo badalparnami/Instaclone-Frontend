@@ -25,3 +25,38 @@ textarea {
   font-weight: inherit;
   font-size: inherit;
 }
+
+a.linkified,
+a.linkified:visited {
+  text-decoration: none;
+  color: #00376b;
+}
+
+button:disabled,
+button[disabled] {
+  cursor: not-allowed !important;
+}
+
+button {
+  position: relative;
+}
+
+.profile-follow {
+  color: #0095f6;
+}
+
+.profile-following {
+}
+
+.unfollow-avatar {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.unfollow-avatar img {
+  cursor: default !important;
+  height: 10rem !important;
+  width: 10rem !important;
+  margin: 0 !important;
+}

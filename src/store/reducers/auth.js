@@ -3,6 +3,7 @@ const initialState = {
   error: null,
   loading: false,
   loggedIn: undefined,
+  logout: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -13,7 +14,6 @@ const authReducer = (state = initialState, action) => {
         ...state,
         error: null,
         loading: true,
-        loggedIn: undefined,
       };
     case "AUTH_SUCCESS":
       return {
@@ -33,12 +33,15 @@ const authReducer = (state = initialState, action) => {
     case "AUTH_LOGOUT":
       return {
         ...initialState,
+        loggedIn: false,
+        logout: true,
       };
     case "CLEAR":
       return {
         ...state,
         error: null,
         loading: false,
+        logout: false,
       };
     case "UNAUTH":
       return {

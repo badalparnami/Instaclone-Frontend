@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProfilePost = () => {
+const ProfilePost = ({ isUser }) => {
   return (
     <div className="profile-display">
       <div className="profile-display-posts">
@@ -10,9 +10,13 @@ const ProfilePost = () => {
           width="64px"
           alt=""
         />
-        <h1>Profile</h1>
-        <p>When you share photos, they will appear on your profile.</p>
-        <button>Share your first photo</button>
+        <h1>{!isUser ? "Profile" : "No Posts Yet"}</h1>
+        {!isUser && (
+          <>
+            <p>When you share photos, they will appear on your profile.</p>
+            <button>Share your first photo</button>
+          </>
+        )}
       </div>
     </div>
   );

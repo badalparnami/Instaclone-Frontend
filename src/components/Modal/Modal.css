@@ -196,3 +196,16 @@
     transform: scale(1);
   }
 }
+
+.modal .auth {
+  min-height: 60vh;
+}
+
+.modal .auth + button {
+  display: none;
+}
+
+.modal .auth-container form input {
+  position: absolute;
+  left: 0;
+}

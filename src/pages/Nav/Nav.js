@@ -57,7 +57,7 @@ const Nav = ({ isLoggedIn }) => {
               isPopupOpen={isSearchOpen}
               setIsPopupOpen={setIsSearchOpen}
             >
-              <Search value={searchValue} />
+              <Search closeMe={setSearchValue} value={searchValue} />
             </PopupHelper>
           )}
         </div>
@@ -117,14 +117,13 @@ const Nav = ({ isLoggedIn }) => {
               )}
             </div>
 
-            <a
+            <button
               onClick={() => {
                 setRedirect(false);
                 setIsImageUploaderOpen(true);
               }}
               className="upload"
-              href="#"
-            ></a>
+            ></button>
             <ImageUploader
               openPicker={isImageUploaderOpen}
               makeMeFalse={setIsImageUploaderOpen}

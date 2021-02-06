@@ -1,9 +1,20 @@
 import React from "react";
 
-const SearchUserCard = ({ username, name, onClick, avatar }) => {
+const SearchUserCard = ({
+  username,
+  name,
+  onClick,
+  avatar,
+  mention,
+  tag,
+  relation,
+}) => {
   return (
     <div className="user-container">
-      <div className="user-card" onClick={() => onClick(username)}>
+      <div
+        className="user-card"
+        onClick={() => onClick(username, mention, tag, relation)}
+      >
         <img
           src={
             avatar

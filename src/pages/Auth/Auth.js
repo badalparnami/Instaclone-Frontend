@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import "./Auth.css";
 
 import { auth } from "../../store/actions/auth";
+import { showAlert } from "../../store/actions/alert";
+import Loader from "../../components/Loader/Loader";
+
+const notAllowedUsernames = [
+  "signup",
+  "profile",
+  "explore",
+  "post",
+  "newpost",
+  "404",
+];
 
 const InputContainer = (props) => {
   const [focusedValue, setFocusedValue] = useState(false);
@@ -37,6 +48,17 @@ const Auth = ({ isLoginPage }) => {
 
   const dispatch = useDispatch();
 
+  const { loading } = useSelector((state) => state.auth);
+
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (error !== null) {
+      dispatch(showAlert(error));
+      setError(null);
+    }
+  }, [error]);
+
   const showPassword = (e) => {
     e.preventDefault();
     setShowPass(!showPass);
@@ -54,22 +76,52 @@ const Auth = ({ isLoginPage }) => {
     e.preventDefault();
 
     if (
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
+      !/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
         email
-      ) &&
-      password.length >= 6
+      )
     ) {
-      if (isLogin) {
-        dispatch(auth(email, password, isLogin));
-      } else if (name.length >= 3 && username.length >= 3) {
-        dispatch(auth(email, password, isLogin, username, name));
-      } else {
-        console.log("no you are not inside");
+      setError("Invalid email address");
+      return;
+    }
+
+    if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/.test(password)) {
+      setError(
+        "Password should be of atleast 6 characters containing atleast 1 uppercase, 1 lowercase and 1 number"
+      );
+      return;
+    }
+
+    if (isLogin) {
+      dispatch(auth(email, password, isLogin));
+    } else {
+      if (name.trim().length < 3) {
+        setError("Name should be of more than 3 characters");
         return;
       }
-    } else {
-      console.log("no you are not outside");
-      return;
+
+      if (!/^[a-zA-Z]([a-zA-Z]+){2,}(\s[a-zA-Z]([a-zA-Z]+)*)?$/.test(name)) {
+        setError("Only alphabets allowed in name");
+        return;
+      }
+
+      if (username.length < 3) {
+        setError("Username should be of more than 3 characters");
+        return;
+      }
+
+      if (!/^[a-zA-Z0-9\\_.]+$/.test(username)) {
+        setError(
+          "Username can contain only letters, numbers and symbols . or _ "
+        );
+        return;
+      }
+
+      if (notAllowedUsernames.includes(username.toString().toLowerCase())) {
+        setError("This username is not allowed");
+        return;
+      }
+
+      dispatch(auth(email, password, isLogin, username, name));
     }
   };
 
@@ -95,8 +147,6 @@ const Auth = ({ isLoginPage }) => {
               onChange={(e) => setName(e.target.value)}
               text="Full Name"
               minLength="3"
-              pattern="^[a-zA-Z\s]+$"
-              title="Only alphabets allowed"
             />
           )}
           {!isLogin && (
@@ -127,7 +177,9 @@ const Auth = ({ isLoginPage }) => {
             <span className="valid"></span>
           </div>
           <div className="form-button">
-            <button>{isLogin ? "Log In" : "Sign up"}</button>
+            <button disabled={loading}>
+              {isLogin ? "Log In" : "Sign up"} {loading && <Loader />}
+            </button>
           </div>
         </form>
       </div>

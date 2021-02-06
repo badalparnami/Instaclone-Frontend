@@ -10,6 +10,7 @@ const Modal = ({
   isUser,
   isOptions,
   closeOnClick,
+  styles,
 }) => {
   const root = document.body;
 
@@ -21,6 +22,7 @@ const Modal = ({
     <div
       id="myModal"
       className="modal animation-1"
+      style={{ ...styles }}
       onClick={() => {
         onClick(false);
         !closeOnClick && (root.style.overflow = "auto");
@@ -64,52 +66,6 @@ const Modal = ({
           )}
         </div>
       </div>
-
-      {/* <div className="modal-content users" onClick={(e) => e.stopPropagation()}>
-        <div className="header">
-          <h1>Following</h1>
-          <button
-            onClick={() => {
-              onClick(false);
-              root.style.overflow = "auto";
-            }}
-            className="close"
-          >
-            ✕
-          </button>
-        </div>
-        <div className="following-overview">
-          <div className="user-card">
-            <a className="avatar" href="#">
-              <img
-                className="avatar avatar--small"
-                src="https://res.cloudinary.com/drwb19czo/image/upload/v1592143124/hkhrolzqz4zkama4uf5m.png"
-                alt="Avatar"
-              />
-            </a>
-            <div className="user-card__details">
-              <a href="#"> username </a>
-              <p>Name</p>
-            </div>
-            <button>Following</button>
-          </div>
-
-          <div className="user-card">
-            <a className="avatar" href="#">
-              <img
-                className="avatar avatar--small"
-                src="https://res.cloudinary.com/drwb19czo/image/upload/v1592143124/hkhrolzqz4zkama4uf5m.png"
-                alt="Avatar"
-              />
-            </a>
-            <div className="user-card__details">
-              <a href="#"> username </a>
-              <p>Name</p>
-            </div>
-            <button className="inactive">Follow</button>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };

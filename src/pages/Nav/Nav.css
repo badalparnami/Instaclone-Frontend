@@ -91,11 +91,15 @@ header .header-content {
   background-color: rgba(38, 38, 38, 0.7);
 }
 
-a.upload {
+button.upload {
   background-image: url("./camera-icon.png");
   background-repeat: no-repeat;
   width: 3rem;
   height: 4rem;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 .header-icons a.active svg[aria-label="Home"] path {

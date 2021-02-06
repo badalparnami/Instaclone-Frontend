@@ -1,10 +1,19 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
 // import "../pages/Activity/Activity.css";
+import { logoutAsync } from "../store/actions/auth";
 
 import NavIcon from "./NavIcon";
 
 const ProfilePopup = () => {
+  const { token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const logoutHandler = () => {
+    dispatch(logoutAsync(token));
+  };
+
   return (
     <div
       style={{ width: "23rem", borderRadius: "6px" }}
@@ -42,7 +51,7 @@ const ProfilePopup = () => {
           <span>Settings</span>
         </NavLink>
         <p className="divider"></p>
-        <button>Log Out</button>
+        <button onClick={logoutHandler}>Log Out</button>
       </ul>
     </div>
   );

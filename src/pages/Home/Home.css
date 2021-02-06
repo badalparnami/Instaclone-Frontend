@@ -48,12 +48,12 @@
 }
 
 .home-page .post-details a.username {
-  padding: 2px;
   top: 1px;
   text-decoration: none;
   color: #262626;
   font-weight: 600;
   font-size: 1.4rem;
+  margin-right: 4px;
 }
 
 .home-page .post-details a.username:hover {
@@ -70,17 +70,19 @@
 .home-page .home-page__post .post-image {
   display: flex;
   align-items: center;
-  /* justify-content: flex-end; */
+  justify-content: center;
   /* height: 61rem; */
   /* min-width: 35rem; */
   /* max-width: 58.5rem; */
   overflow: hidden;
+  background-color: #eee;
 }
 
 .home-page .home-page__post .post-image img {
   display: block;
   max-width: 100%;
   max-height: 100%;
+  min-height: 20rem;
 }
 
 /* ---STATS CTA--- */
@@ -129,6 +131,7 @@
 
 .home-page .post-comment.real .comment-details {
   margin-right: 1rem;
+  width: 100%;
 }
 
 .home-page .post-comment .comment-details p span {
@@ -140,7 +143,7 @@
 
 .home-page .post-comment.real .comment-like {
   cursor: pointer;
-  padding-top: 0.5rem;
+  /* padding-top: 0.5rem; */
 }
 
 .comment-like.active svg[aria-label="Like"] {
@@ -168,6 +171,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
+  position: relative;
+}
+
+.home-page .post-add_comment .popup-card {
+  top: 5.5rem;
+}
+
+.home-page .post-add_comment .popup-card ul {
+  max-height: unset;
+  height: 10rem;
 }
 
 .home-page .post-add_comment input {
@@ -195,6 +208,12 @@
   font-size: 1.5rem;
   letter-spacing: 0.5px;
   outline: 0;
+}
+
+.home-page .post-add_comment button .loadingSpinner {
+  top: 13%;
+  left: 27%;
+  transform: translate(-27%, -13%);
 }
 
 /* SIDEBAR  */

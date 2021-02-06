@@ -11,6 +11,8 @@ import thunk from "redux-thunk";
 
 import authReducer from "./store/reducers/auth";
 import profileReducer from "./store/reducers/profile";
+import commentReducer from "./store/reducers/comment";
+import alertReducer from "./store/reducers/alert";
 
 const composeEnhancers =
   process.env.NODE_ENV === "development"
@@ -20,6 +22,8 @@ const composeEnhancers =
 const rootReducer = combineReducers({
   auth: authReducer,
   profile: profileReducer,
+  comment: commentReducer,
+  alert: alertReducer,
 });
 
 const store = createStore(

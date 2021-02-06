@@ -50,11 +50,11 @@
 
 .suggestion-card .user-details {
   line-height: 1.8rem;
-  align-self: flex-start;
 }
 
 .suggestions-page.large .suggestion-card .user-details {
   margin-left: 1.2rem;
+  align-self: flex-start;
 }
 
 .suggestion-card .user-details a {
@@ -84,8 +84,12 @@
   color: #fff;
 }
 
-.suggestions-page.large .suggestion-card button.active {
+.suggestions-page.large .suggestion-card button.profile-following {
   background-color: transparent;
   border: 1px solid #dbdbdb;
   color: #262626;
+}
+
+.suggestion-card .user-card {
+  margin-left: auto;
 }

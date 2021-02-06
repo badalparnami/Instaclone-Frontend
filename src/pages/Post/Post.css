@@ -17,18 +17,20 @@ main.post-page {
 .post-page .post-page-container .post-image {
   display: flex;
   align-items: center;
-  /* justify-content: flex-end; */
+  justify-content: center;
   height: 61rem;
   border: 1px solid #dbdbdb;
   border-right: none;
-  min-width: 35rem;
+  min-width: 40rem;
   max-width: 58.5rem;
+  background-color: #eee;
 }
 
 .post-page-container .post-image img {
   display: block;
   max-width: 100%;
   max-height: 100%;
+  min-height: 50%;
 }
 
 .post-page .post-details {
@@ -54,7 +56,7 @@ main.post-page {
 
 .post-page .post-details a.user-avatar img {
   border-radius: 100px;
-  border: 1px solid #dbdbdb;
+  /* border: 1px solid #dbdbdb; */
   width: 4rem;
   height: 4rem;
 }
@@ -64,7 +66,8 @@ main.post-page {
   color: #262626;
   font-weight: 600;
   font-size: 1.4rem;
-  padding: 2px;
+  /* padding: 2px; */
+  margin-right: 4px;
 }
 
 .post-page .post-details .post-header span {
@@ -74,16 +77,26 @@ main.post-page {
 .post-page .post-details .post-header button {
   border: none;
   outline: none;
-  color: #0095f6;
   background: 0 0;
   cursor: pointer;
   font-weight: 600;
   font-size: 1.33rem;
 }
 
+button.inactive {
+  border: 1px solid transparent;
+  color: #0095f6;
+}
+
 .post-page .post-details .post-header button.active {
   color: #262626;
   font-size: 1.4rem;
+}
+
+.post-page .post-details .post-header button .loadingSpinner {
+  top: 9%;
+  left: 36%;
+  transform: translate(-36%, -9%);
 }
 
 .post-page .post-details a.username:hover {
@@ -111,6 +124,7 @@ main.post-page {
   display: flex;
   align-items: flex-start;
   position: relative;
+  overflow-wrap: anywhere;
 }
 
 .post-page .post-comments div.post-comment.is-reply {
@@ -118,8 +132,29 @@ main.post-page {
   margin-left: 5rem;
 }
 
+.post-page .post-comments .more-comments {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.post-page .post-comments .more-comments span {
+  background-image: url(./more-comments.png);
+  background-repeat: no-repeat;
+  width: 2.8rem;
+  height: 2.6rem;
+  /* background-size: contain; */
+  display: block;
+}
+
+.post-page .post-comment .comment-details {
+  width: 75%;
+}
+
 .post-page .post-comment.real .comment-details {
   margin-right: 1rem;
+  width: 100%;
 }
 
 .post-page .post-comment .comment-details p span {
@@ -148,6 +183,7 @@ main.post-page {
   background: 0 0;
   border: 0;
   cursor: pointer;
+  outline: none;
 }
 
 .post-page .comment-details p.view-reply {
@@ -267,6 +303,20 @@ main.post-page {
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
+  position: relative;
+}
+
+.post-page .post-add_comment .popup-card {
+  top: -115%;
+}
+
+.post-page .post-add_comment .popup-card ul {
+  max-height: 7rem;
+}
+
+.post-page .post-add_comment .popup-card::before {
+  bottom: -14%;
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
 }
 
 .post-page .post-add_comment input {
@@ -294,4 +344,10 @@ main.post-page {
   font-size: 1.5rem;
   letter-spacing: 0.5px;
   outline: 0;
+}
+
+.post-page .post-add_comment button .loadingSpinner {
+  top: 13%;
+  left: 23%;
+  transform: translate(-23%, -13%);
 }

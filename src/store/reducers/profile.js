@@ -11,7 +11,7 @@ const initialState = {
   manuallyApproveTag: null,
   tag: null,
   mention: null,
-  post: null,
+  post: null, //r
   follower: null,
   following: null,
   isUsernameChangeAllowed: null,
@@ -19,13 +19,14 @@ const initialState = {
   likeCount: null,
   savedCount: null,
   blockedCount: null,
-  pendingFollowerCount: null,
+  pendingFollowerCount: null, //r
   archivePostCount: null,
-  taggedPostCount: null,
-  pendingTaggedPostCount: null,
+  taggedPostCount: null, //r
+  pendingTaggedPostCount: null, //r
+  postCount: null,
 };
 
-const authReducer = (state = initialState, action) => {
+const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case "GET_PROFILE_DATA_START":
       return {
@@ -62,4 +63,4 @@ const authReducer = (state = initialState, action) => {
   }
 };
 
-export default authReducer;
+export default profileReducer;

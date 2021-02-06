@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Redirect, useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import "./NewPost.css";
 import NavIcon from "../../components/NavIcon";
@@ -9,6 +9,7 @@ import NewPostCaption from "./NewPostCaption";
 import NewPostFilters from "./NewPostFilters";
 import NewPostTagged from "./NewPostTagged";
 import useReq from "../../hooks/useReq";
+import { updateProfile } from "../../store/actions/profile";
 
 export const BackButtonIcon = () => (
   <NavIcon ariaLabel="Back" height="24" width="24" />
@@ -25,9 +26,11 @@ const PostUpload = ({ location }) => {
   const [commentOff, setCommentOff] = useState(false);
   const [taggedUser, setTaggedUser] = useState([]);
 
-  const { clear, requestData, response } = useReq();
+  const { clear, requestData, response, loading } = useReq();
   const history = useHistory();
-  const { avatar } = useSelector((state) => state.profile);
+  const { avatar, postCount } = useSelector((state) => state.profile);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (typeof location.state === "undefined") {
@@ -40,6 +43,7 @@ const PostUpload = ({ location }) => {
 
   useEffect(() => {
     if (response !== null) {
+      dispatch(updateProfile({ postCount: postCount + 1 }));
       history.push(`/post/${response.postId}`);
     }
     return () => clear();
@@ -104,6 +108,7 @@ const PostUpload = ({ location }) => {
         onSubmitHandler={onSubmitHandler}
         caption={caption}
         avatar={avatar}
+        loading={loading}
       />
     );
   }

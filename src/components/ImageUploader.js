@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Redirect } from "react-router-dom";
 
+import useReq from "../hooks/useReq";
+
 const ImageUploader = ({ makeMeFalse, openPicker, redirect, setRedirect }) => {
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const filePickerRef = useRef();
+
+  const { alertHandler } = useReq();
 
   useEffect(() => {
     if (openPicker) {
@@ -21,20 +25,28 @@ const ImageUploader = ({ makeMeFalse, openPicker, redirect, setRedirect }) => {
     const processFile = () => {
       return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
         fileReader.onload = () => {
           resolve(setPreviewUrl(fileReader.result));
         };
-
-        fileReader.readAsDataURL(file);
       });
     };
 
     const helper = async () => {
-      await processFile();
-      setRedirect(true);
+      if (file.type === "image/png" || file.type === "image/jpeg") {
+        await processFile();
+        setRedirect(true);
+      } else {
+        alertHandler("Invalid type. Supported types are png and jpeg.");
+        setFile(null);
+      }
     };
 
     helper();
+
+    return () => {
+      window.URL.revokeObjectURL(previewUrl);
+    };
   }, [file, setRedirect]);
 
   // const pickImageHandler = () => {
@@ -65,7 +77,7 @@ const ImageUploader = ({ makeMeFalse, openPicker, redirect, setRedirect }) => {
       ref={filePickerRef}
       type="file"
       style={{ display: "none" }}
-      accept=".jpg,.png,.jpeg"
+      accept=".jpg,.jpeg"
       onChange={pickedHandler}
     />
   );

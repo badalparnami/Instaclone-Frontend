@@ -53,6 +53,12 @@
   font-weight: 600;
 }
 
+.new-post__header button.next .loadingSpinner {
+  top: 26%;
+  left: 33%;
+  transform: translate(-33%, -26%);
+}
+
 .new-post__preview {
   height: 100%;
   border: 1px solid #dbdbdb;
@@ -144,6 +150,12 @@
   border: 1px solid #dbdbdb;
   border-top: none;
   border-bottom: none;
+  position: relative;
+}
+
+.new-post__caption .popup-card {
+  z-index: 2;
+  top: 100%;
 }
 
 .new-post__caption .post-avatar {

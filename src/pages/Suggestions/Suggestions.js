@@ -3,16 +3,20 @@ import "./Suggestions.css";
 
 import SuggestionCard from "../../components/SuggestionCard";
 
-const Suggestions = () => {
+const Suggestions = ({ suggestions }) => {
   return (
-    <div class="suggestions-page large">
+    <div className="suggestions-page large">
       <h1>Suggestions For You</h1>
-      <div class="suggestions-card">
-        <SuggestionCard />
-        <SuggestionCard />
-        <SuggestionCard />
-        <SuggestionCard />
-        <SuggestionCard />
+      <div className="suggestions-card">
+        {suggestions.map((u) => (
+          <SuggestionCard
+            avatar={u.avatar}
+            name={u.name}
+            username={u.username}
+            key={u.username}
+            relation={u.relation}
+          />
+        ))}
       </div>
     </div>
   );

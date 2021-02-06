@@ -15,8 +15,9 @@ const AvatarUploader = ({
   const [file, setFile] = useState(null);
   const filePickerRef = useRef();
   const dispatch = useDispatch();
+  const root = document.body;
 
-  const { response, requestData, clear } = useReq();
+  const { response, requestData, clear, alertHandler } = useReq();
   const {
     response: responseRemAvatar,
     requestData: requestDataRemAvatar,
@@ -32,9 +33,13 @@ const AvatarUploader = ({
 
   useEffect(() => {
     if (file) {
-      const formData = new FormData();
-      formData.append("image", file);
-      requestData("post", "user/avatar", formData);
+      if (file.type === "image/png" || file.type === "image/jpeg") {
+        const formData = new FormData();
+        formData.append("image", file);
+        requestData("post", "user/avatar", formData);
+      } else {
+        alertHandler("Invalid type. Supported types are png and jpeg.");
+      }
       setFile(null);
     }
   }, [file]);
@@ -42,6 +47,7 @@ const AvatarUploader = ({
   useEffect(() => {
     if (response !== null) {
       dispatch(updateProfile({ avatar: response.avatar }));
+      alertHandler("Profile photo added.");
       clear();
     }
   }, [response]);
@@ -49,6 +55,7 @@ const AvatarUploader = ({
   useEffect(() => {
     if (responseRemAvatar !== null) {
       dispatch(updateProfile({ avatar: null }));
+      alertHandler("Profile photo removed.");
       clearRemAvatar();
     }
   }, [responseRemAvatar]);
@@ -91,6 +98,7 @@ const AvatarUploader = ({
             onClick={() => {
               makeMeFalse(true);
               setAvatarOptions(false);
+              root.style.overflow = "auto";
             }}
             className="blue-option"
           >
@@ -100,6 +108,7 @@ const AvatarUploader = ({
             onClick={() => {
               removeAvatar();
               setAvatarOptions(false);
+              root.style.overflow = "auto";
             }}
             className="red-option"
           >

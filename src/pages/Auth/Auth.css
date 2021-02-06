@@ -104,6 +104,7 @@
   top: 50%;
   font-size: 1rem;
   padding: 0.1rem 0;
+  margin: 0 !important;
 }
 
 .auth-container form input:placeholder-shown + span:nth-of-type(1) {
@@ -123,6 +124,7 @@
   right: 5px;
   top: 50%;
   transform: translateY(-50%);
+  margin: 0 !important;
 }
 
 .auth-container form input:valid:not(:placeholder-shown) ~ span.valid {
@@ -192,7 +194,13 @@
   width: 100%;
   border-radius: 4px;
   color: #fff;
-  background-color: #0095f6;
+  background-color: #0095f6 !important;
+}
+
+.auth-container form .form-button button .loadingSpinner {
+  top: 30%;
+  left: 77%;
+  transform: translate(-77%, -30%);
 }
 
 .auth .auth-change {

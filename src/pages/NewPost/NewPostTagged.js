@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import PopupHelper from "../../components/PopupHelper";
 import Search from "../Search/Search";
+import useReq from "../../hooks/useReq";
 
 import { BackButtonIcon } from "./NewPost";
 
 const NewPostTagged = ({ setPage, taggedUser, setTaggedUser }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const { alertHandler } = useReq();
 
   useEffect(() => {
     if (searchValue) {
@@ -16,12 +18,17 @@ const NewPostTagged = ({ setPage, taggedUser, setTaggedUser }) => {
     }
   }, [searchValue]);
 
-  const taggedUserHandler = (username) => {
+  const taggedUserHandler = (username, m, t, r) => {
     const isUserAlreadyTagged = taggedUser.find((u) => u === username);
     if (isUserAlreadyTagged) {
       return;
     }
-    setTaggedUser([...taggedUser, username]);
+
+    if (t === "everyone" || (t === "follow" && r === true)) {
+      setTaggedUser([...taggedUser, username]);
+    } else {
+      alertHandler(`Can not tag ${username} as it is not allowed.`);
+    }
   };
 
   const removeTaggedUser = (username) => {
@@ -58,6 +65,7 @@ const NewPostTagged = ({ setPage, taggedUser, setTaggedUser }) => {
             <PopupHelper
               isPopupOpen={isSearchOpen}
               setIsPopupOpen={setIsSearchOpen}
+              isProfile={true}
             >
               <Search value={searchValue} onClick={taggedUserHandler} />
             </PopupHelper>

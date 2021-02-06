@@ -1,27 +1,45 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
-const PostCaption = ({ isHome, username, caption }) => {
+import Linkify from "linkifyjs/react";
+import * as linkify from "linkifyjs";
+import mention from "linkifyjs/plugins/mention";
+import hashtag from "linkifyjs/plugins/hashtag";
+
+import { formatDateComments } from "../utils/date";
+import { linkifyOptions } from "../utils/linkify";
+
+mention(linkify);
+hashtag(linkify);
+
+const PostCaption = ({ isHome, username, caption, date, avatar }) => {
   return (
     <div className="post-comment">
       {!isHome && (
-        <a className="user-avatar" href="">
+        <NavLink className="user-avatar" to={`/${username}`}>
           <img
-            alt="virat.kohli's profilePicture"
+            alt=" "
             draggable="false"
-            src="https://instagram.fdel11-1.fna.fbcdn.net/v/t51.2885-19/s150x150/120097897_172397281086637_5031602793879746188_n.jpg?_nc_ht=instagram.fdel11-1.fna.fbcdn.net&amp;_nc_ohc=dBwUjVtwxNUAX-1aZEw&amp;tp=1&amp;oh=c49552f8616605bbce2acd9a255560ff&amp;oe=6032E336"
+            src={
+              avatar
+                ? avatar
+                : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+            }
           />
-        </a>
+        </NavLink>
       )}
       <div className="comment-details">
         <p>
-          <a href="#" className="username">
+          <NavLink to={`/${username}`} className="username">
             {username}
-          </a>
-          <span>{caption}</span>
+          </NavLink>
+          {/* <span>{caption}</span> */}
+          <Linkify options={linkifyOptions}>{caption}</Linkify>
         </p>
         {!isHome && (
           <div className="comment-stats">
-            <p className="time">1d</p>
+            {/* <p className="time">1d</p> */}
+            <p className="time">{formatDateComments(date)}</p>
           </div>
         )}
       </div>

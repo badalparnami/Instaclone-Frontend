@@ -6,6 +6,7 @@ import { updateProfile } from "../store/actions/profile";
 import Modal from "./Modal/Modal";
 import useReq from "../hooks/useReq";
 import AvatarUploader from "./AvatarUploader";
+import Loader from "./Loader/Loader";
 
 function validURL(str) {
   var pattern = new RegExp(
@@ -19,6 +20,15 @@ function validURL(str) {
   ); // fragment locator
   return !!pattern.test(str);
 }
+
+const notAllowedUsernames = [
+  "signup",
+  "profile",
+  "explore",
+  "post",
+  "newpost",
+  "404",
+];
 
 const SettingsEditProfile = ({
   nameP,
@@ -41,7 +51,15 @@ const SettingsEditProfile = ({
   const dispatch = useDispatch();
 
   let updatesObj = {};
-  const { requestData, response, setError, clear } = useReq();
+  const {
+    requestData,
+    response,
+    clear,
+    alertHandler,
+    error,
+    setError,
+    loading,
+  } = useReq();
   const {
     requestData: requestData2,
     response: response2,
@@ -52,7 +70,14 @@ const SettingsEditProfile = ({
   const [avatarOptions, setAvatarOptions] = useState(false);
 
   useEffect(() => {
+    if (error !== null) {
+      alertHandler(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
     if (response !== null) {
+      alertHandler("Profile saved.");
       dispatch(updateProfile(updateObj));
       clear();
     }
@@ -61,6 +86,7 @@ const SettingsEditProfile = ({
   useEffect(() => {
     if (response2 !== null) {
       dispatch(updateProfile({ username: lastUsername, lastUsername: null }));
+      alertHandler("Username Changed");
       clear2();
     }
   }, [response2, lastUsername]);
@@ -82,13 +108,25 @@ const SettingsEditProfile = ({
       return;
     }
 
-    if (!/^[a-z]([a-z]+){2,}(\s[a-z]([a-z]+)*)?$/.test(name)) {
+    if (!/^[a-zA-Z]([a-zA-Z]+){2,}(\s[a-zA-Z]([a-zA-Z]+)*)?$/.test(name)) {
       setError("Only alphabets allowed in name");
       return;
     }
 
     if (username.length < 3) {
       setError("Username should be of more than 3 characters");
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9\\_.]+$/.test(username)) {
+      setError(
+        "Username can contain only letters, numbers and symbols . or _ "
+      );
+      return;
+    }
+
+    if (notAllowedUsernames.includes(username.toString().toLowerCase())) {
+      setError("This username is not allowed");
       return;
     }
 
@@ -118,13 +156,17 @@ const SettingsEditProfile = ({
     }
 
     if (website !== websiteP) {
-      updates.push({ change: "website", value: website });
-      updatesObj = { ...updatesObj, website };
+      if (websiteP !== null && website.length !== 0) {
+        updates.push({ change: "website", value: website });
+        updatesObj = { ...updatesObj, website };
+      }
     }
 
     if (bio !== bioP) {
-      updates.push({ change: "bio", value: bio });
-      updatesObj = { ...updatesObj, bio };
+      if (bioP !== null && bio.length !== 0) {
+        updates.push({ change: "bio", value: bio });
+        updatesObj = { ...updatesObj, bio };
+      }
     }
 
     if (email !== emailP) {
@@ -247,7 +289,7 @@ const SettingsEditProfile = ({
         />
 
         <SettingsFormGroup>
-          <button>Submit</button>
+          <button disabled={loading}>Submit {loading && <Loader />}</button>
         </SettingsFormGroup>
       </form>
 

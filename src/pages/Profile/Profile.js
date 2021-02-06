@@ -1,73 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Redirect, NavLink, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { NavLink, useHistory } from "react-router-dom";
 import "./Profile.css";
 
-import ImageWOverlay from "../../components/ImageWOverlay";
 import ProfilePost from "../../components/ProfilePost";
 import ProfileSaved from "../../components/ProfileSaved";
 import ProfileTagged from "../../components/ProfileTagged";
 import Modal from "../../components/Modal/Modal";
 import ProfileCategory from "../../components/ProfileCategory";
-import ProfilePopupUserCard from "../../components/ProfilePopupUserCard";
 import NavIcon from "../../components/NavIcon";
-import useReq from "../../hooks/useReq";
 import AvatarUploader from "../../components/AvatarUploader";
+import InfiniteData from "../../components/InfiniteData";
+import InfiniteData2 from "../../components/InfiniteData2";
+import { logoutAsync } from "../../store/actions/auth";
 
 const Profile = ({ page }) => {
   const { token } = useSelector((state) => state.auth);
   const profileData = useSelector((state) => state.profile);
-  const [isTokenRendered, setIsTokenRendered] = useState(false);
   const [openFollowing, setOpenFollowing] = useState(false);
-  const [openFollow, setOpenFollow] = useState(false);
+  const [openFollower, setOpenFollower] = useState(false);
   const [openOptions, setOpenOptions] = useState(false);
-
-  const [followingUsers, setFollowingUsers] = useState([]);
-
-  const { requestData, response } = useReq();
-  const { requestData: requestDataSaved, response: responseSaved } = useReq();
-  const { requestData: requestDataTagged, response: responseTagged } = useReq();
-
-  const { savedCount, taggedPostCount } = profileData;
 
   const [openPicker, setOpenPicker] = useState(false);
   const [avatarOptions, setAvatarOptions] = useState(false);
 
   const history = useHistory();
   const root = document.body;
-
-  useEffect(() => {
-    setIsTokenRendered(true);
-  }, []);
-
-  useEffect(() => {
-    if (response !== null && openFollowing) {
-      setFollowingUsers(response.detail);
-    }
-  }, [response, openFollowing]);
-
-  useEffect(() => {
-    if (page === "saved" && savedCount > 0) {
-      requestDataSaved("get", "user/details/saved");
-    }
-    if (page === "tagged" && taggedPostCount > 0) {
-      requestDataTagged("get", "user/details/taggedPost");
-    }
-  }, [page, savedCount, taggedPostCount]);
-
-  if (!token && isTokenRendered) {
-    return <Redirect to="/" />;
-  } else if (!isTokenRendered) {
-    return <div></div>;
-  }
+  const dispatch = useDispatch();
 
   const openFollowingHandler = () => {
     setOpenFollowing(!openFollowing);
-
-    if (profileData.following > 0) {
-      requestData("get", "user/details/following");
-    }
   };
+
+  const openFollowerHandler = () => {
+    setOpenFollower(!openFollower);
+  };
+
+  const logOutHandler = () => {
+    dispatch(logoutAsync(token));
+  };
+
   return (
     <>
       {profileData && (
@@ -115,12 +87,10 @@ const Profile = ({ page }) => {
                 </div>
               </div>
               <div className="profile-2">
-                {profileData.post && (
-                  <p>
-                    <span>{profileData.post.length}</span> {` posts`}
-                  </p>
-                )}
-                <p onClick={() => setOpenFollow(!openFollow)}>
+                <p>
+                  <span>{profileData.postCount}</span> {` posts`}
+                </p>
+                <p onClick={openFollowerHandler}>
                   <span>{profileData.follower} </span> {` followers`}
                 </p>
                 <p onClick={openFollowingHandler}>
@@ -149,81 +119,29 @@ const Profile = ({ page }) => {
             <ProfileCategory to="/profile/tagged" ariaLabel="Tagged" />
           </div>
 
-          {page === "post" &&
-            profileData.post &&
-            profileData.post.length === 0 && <ProfilePost />}
           {page === "saved" && profileData.savedCount === 0 && <ProfileSaved />}
-          {page === "tagged" && profileData.taggedPostCount === 0 && (
-            <ProfileTagged />
+
+          {page === "post" && (
+            <InfiniteData detail="post">
+              <ProfilePost />
+            </InfiniteData>
           )}
 
-          {page === "post" && profileData.post && profileData.post.length > 0 && (
-            <div className="profile-images">
-              {profileData.post.map((p) => (
-                <ImageWOverlay
-                  commentCount={p.commentCount}
-                  likeCount={p.likeCount}
-                  media={
-                    p.media.slice(0, 50) +
-                    "w_640,h_640,c_thumb/" +
-                    p.media.slice(50)
-                  }
-                  styles={p.styles}
-                  key={p.id}
-                  id={p.id}
-                />
-              ))}
-            </div>
+          {page === "tagged" && (
+            <InfiniteData detail="taggedPost">
+              <ProfileTagged />
+            </InfiniteData>
           )}
 
-          {page === "saved" &&
-            profileData.savedCount > 0 &&
-            responseSaved &&
-            responseSaved.detail &&
-            responseSaved.detail.length > 0 && (
-              <div className="profile-images">
-                {responseSaved.detail.map((p) => (
-                  <ImageWOverlay
-                    commentCount={p.commentCount}
-                    likeCount={p.likeCount}
-                    media={
-                      p.media.slice(0, 50) +
-                      "w_640,h_640,c_thumb/" +
-                      p.media.slice(50)
-                    }
-                    styles={p.styles}
-                    key={p.id}
-                    id={p.id}
-                  />
-                ))}
-              </div>
-            )}
+          {page === "saved" && profileData.savedCount >= 0 && (
+            <InfiniteData detail="saved">
+              <ProfileTagged />
+            </InfiniteData>
+          )}
 
-          {page === "tagged" &&
-            profileData.taggedPostCount > 0 &&
-            responseTagged &&
-            responseTagged.detail.length > 0 && (
-              <div className="profile-images">
-                {responseTagged.detail.map((p) => (
-                  <ImageWOverlay
-                    commentCount={p.commentCount}
-                    likeCount={p.likeCount}
-                    media={
-                      p.media.slice(0, 50) +
-                      "w_640,h_640,c_thumb/" +
-                      p.media.slice(50)
-                    }
-                    styles={p.styles}
-                    key={p.id}
-                    id={p.id}
-                  />
-                ))}
-              </div>
-            )}
-
-          {openFollow && profileData.follower === 0 && (
+          {openFollower && profileData.follower === 0 && (
             <Modal
-              onClick={setOpenFollow}
+              onClick={setOpenFollower}
               headingMain="Followers"
               headingSub="Followers"
               content="You'll see all the people who follow you here."
@@ -241,25 +159,21 @@ const Profile = ({ page }) => {
             />
           )}
 
-          {openFollowing &&
-            profileData.following > 0 &&
-            followingUsers.length > 0 && (
-              <Modal
-                onClick={setOpenFollowing}
-                headingMain="Following"
-                isOptions={false}
-                isUser={true}
-              >
-                {followingUsers.map((f) => (
-                  <ProfilePopupUserCard
-                    name={f.name}
-                    username={f.username}
-                    relation={f.relation}
-                    key={f.username}
-                  />
-                ))}
-              </Modal>
-            )}
+          {openFollower && profileData.follower > 0 && (
+            <InfiniteData2
+              detail="follower"
+              onClickFn={setOpenFollower}
+              headingMain="Followers"
+            />
+          )}
+
+          {openFollowing && profileData.following > 0 && (
+            <InfiniteData2
+              detail="following"
+              onClickFn={setOpenFollowing}
+              headingMain="Following"
+            />
+          )}
 
           {openOptions && (
             <Modal onClick={setOpenOptions} isUser={true} isOptions={true}>
@@ -279,7 +193,14 @@ const Profile = ({ page }) => {
               >
                 Privacy and Security
               </button>
-              <button>Log Out</button>
+              <button
+                onClick={() => {
+                  root.style.overflow = "auto";
+                  logOutHandler();
+                }}
+              >
+                Log Out
+              </button>
             </Modal>
           )}
         </main>
