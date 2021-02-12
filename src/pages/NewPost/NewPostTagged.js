@@ -19,6 +19,10 @@ const NewPostTagged = ({ setPage, taggedUser, setTaggedUser }) => {
   }, [searchValue]);
 
   const taggedUserHandler = (username, m, t, r) => {
+    if (taggedUser.length > 9) {
+      alertHandler(`You can tag maximum 10 users at once.`);
+      return;
+    }
     const isUserAlreadyTagged = taggedUser.find((u) => u === username);
     if (isUserAlreadyTagged) {
       return;

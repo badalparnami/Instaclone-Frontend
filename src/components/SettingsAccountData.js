@@ -59,14 +59,16 @@ const SettingsAccountData = ({ page }) => {
           <p>Your account doesn't have any information to show here.</p>
         )}
 
-        {page === "like" && likeCount > 0 && <InfiniteData detail="like" />}
+        {page === "like" && likeCount > 0 && (
+          <InfiniteData detail="like" size={150} />
+        )}
 
         {page === "archive" && archivePostCount > 0 && (
-          <InfiniteData detail="archivePost" />
+          <InfiniteData size={150} detail="archivePost" />
         )}
 
         {page === "pendingPost" && (
-          <InfiniteData detail="pendingTaggedPost">
+          <InfiniteData size={150} detail="pendingTaggedPost">
             <p>Your account doesn't have any information to show here.</p>
           </InfiniteData>
         )}

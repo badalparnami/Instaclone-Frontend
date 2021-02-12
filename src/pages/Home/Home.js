@@ -3,14 +3,17 @@ import { useSelector } from "react-redux";
 import "./Home.css";
 import { NavLink } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Skeleton from "react-loading-skeleton";
 
 import SuggestionCard from "../../components/SuggestionCard";
 import HomePost from "../../components/HomePost";
 import useReq from "../../hooks/useReq";
 import Suggestions from "../Suggestions/Suggestions";
 
+import defaultAvatar from "../../assets/default-avatar.jpg";
+
 const Home = () => {
-  const { requestData, response, clear } = useReq();
+  const { requestData, response, clear, loading } = useReq();
   const [homePosts, setHomePosts] = useState([]);
 
   const [total, setTotal] = useState(null);
@@ -18,7 +21,15 @@ const Home = () => {
 
   const profileData = useSelector((state) => state.profile);
 
-  const { requestData: requestDataS, response: responseS } = useReq();
+  const {
+    requestData: requestDataS,
+    response: responseS,
+    loading: loadingS,
+  } = useReq();
+
+  useEffect(() => {
+    document.title = "Instagram";
+  }, []);
 
   useEffect(() => {
     fetchMoreData();
@@ -43,6 +54,24 @@ const Home = () => {
   const fetchMoreData = () => {
     requestData("get", `post/feed/${curPage}`);
   };
+
+  if (loading && total === null) {
+    return (
+      <div className="home-page">
+        <div className="post-feed">
+          <Skeleton height={550} />
+        </div>
+        <div className="sidebar">
+          <div className="user-card">
+            <Skeleton circle={true} height={50} width={50} />
+          </div>
+          <div style={{ lineHeight: "2" }}>
+            <Skeleton count={5} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -88,7 +117,8 @@ const Home = () => {
                   src={
                     profileData.avatar
                       ? profileData.avatar
-                      : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                      : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                        defaultAvatar
                   }
                 />
               </NavLink>
@@ -96,6 +126,7 @@ const Home = () => {
                 <NavLink to="/profile">{profileData.username}</NavLink>
               </div>
             </div>
+            {loadingS && <Skeleton count={5} />}
             {responseS && responseS.users && responseS.users.length > 0 && (
               <div className="suggestions-page small">
                 <h1>Suggestions For You</h1>
@@ -112,6 +143,12 @@ const Home = () => {
               </div>
             )}
           </div>
+        </div>
+      )}
+
+      {homePosts && homePosts.length === 0 && loadingS && (
+        <div className="suggestions-page large" style={{ lineHeight: "2" }}>
+          <Skeleton count={20} />
         </div>
       )}
 

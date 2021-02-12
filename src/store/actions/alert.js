@@ -34,3 +34,15 @@ export const showAlert = (text) => {
     }
   };
 };
+
+export const showBar = () => {
+  return {
+    type: "SHOW_PROGRESS_BAR",
+  };
+};
+
+export const hideBar = () => {
+  return {
+    type: "HIDE_PROGRESS_BAR",
+  };
+};

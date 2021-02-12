@@ -26,8 +26,8 @@ const HomePost = ({
   userUsername,
 }) => {
   const [likeCount, setLikeCount] = useState(likeCount1);
-  const [isLiked, setIsLiked] = useState(isSaved1);
-  const [isSaved, setIsSaved] = useState(isLiked1);
+  const [isLiked, setIsLiked] = useState(isLiked1);
+  const [isSaved, setIsSaved] = useState(isSaved1);
   const [comments, setComments] = useState(comments1);
 
   const addPostComment = (id, text, date) => {
@@ -95,7 +95,7 @@ const HomePost = ({
             username={c.username}
             avatar={c.avatar}
             text={c.text}
-            isCommentLiked={c.isLike}
+            isCommentLiked={c.isLiked}
             isHome={true}
             key={c.id}
             id={c.id}

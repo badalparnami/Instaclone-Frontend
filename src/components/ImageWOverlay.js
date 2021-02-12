@@ -1,6 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
+import heartIcon from "../assets/profile-overlay-heart.png";
+import commentIcon from "../assets/profile-overlay-comment.png";
+
 const ImageWOverlay = ({ commentCount, likeCount, media, styles, id }) => {
   return (
     <NavLink to={`/post/${id}`}>
@@ -17,7 +20,8 @@ const ImageWOverlay = ({ commentCount, likeCount, media, styles, id }) => {
         <div className="profile-image__overlay">
           <div className="image-overlay__content">
             <img
-              src={`${process.env.PUBLIC_URL}/images/profile-overlay-heart.png`}
+              // src={`${process.env.PUBLIC_URL}/images/profile-overlay-heart.png`}
+              src={heartIcon}
               alt=""
               width="23"
               height="19"
@@ -27,7 +31,8 @@ const ImageWOverlay = ({ commentCount, likeCount, media, styles, id }) => {
           </div>
           <div className="image-overlay__content">
             <img
-              src={`${process.env.PUBLIC_URL}/images/profile-overlay-comment.png`}
+              // src={`${process.env.PUBLIC_URL}/images/profile-overlay-comment.png`}
+              src={commentIcon}
               width="20"
               height="25"
               alt=""

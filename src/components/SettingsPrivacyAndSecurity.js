@@ -20,7 +20,7 @@ const SettingsPrivacyAndSecurity = ({
   const [allowMention, setAllowMention] = useState(mention);
 
   const dispatch = useDispatch();
-  const { requestData, response, clear, alertHandler } = useReq();
+  const { requestData, response, clear, alertHandler } = useReq(true);
   const [updates, setUpdates] = useState(null);
 
   const [openOptionsPrivate, setOpenOptionsPrivate] = useState(false);

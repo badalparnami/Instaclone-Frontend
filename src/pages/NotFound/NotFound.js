@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import "./NotFound.css";
 
 const NotFound = () => {
+  useEffect(() => {
+    document.title = "Content Unavailable";
+  }, []);
+
   return (
     <div className="not-found">
       <h2>Sorry, this page isn't available.</h2>

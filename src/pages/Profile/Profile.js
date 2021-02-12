@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
+import Linkify from "linkifyjs/react";
+import * as linkify from "linkifyjs";
+import mention from "linkifyjs/plugins/mention";
+import hashtag from "linkifyjs/plugins/hashtag";
+
 import "./Profile.css";
 
 import ProfilePost from "../../components/ProfilePost";
@@ -13,6 +18,12 @@ import AvatarUploader from "../../components/AvatarUploader";
 import InfiniteData from "../../components/InfiniteData";
 import InfiniteData2 from "../../components/InfiniteData2";
 import { logoutAsync } from "../../store/actions/auth";
+import { linkifyOptions } from "../../utils/linkify";
+
+import defaultAvatar from "../../assets/default-avatar.jpg";
+
+mention(linkify);
+hashtag(linkify);
 
 const Profile = ({ page }) => {
   const { token } = useSelector((state) => state.auth);
@@ -27,6 +38,14 @@ const Profile = ({ page }) => {
   const history = useHistory();
   const root = document.body;
   const dispatch = useDispatch();
+
+  const { username } = profileData;
+
+  useEffect(() => {
+    if (username !== null) {
+      document.title = `@${username} • Instagram photos`;
+    }
+  }, [username]);
 
   const openFollowingHandler = () => {
     setOpenFollowing(!openFollowing);
@@ -49,7 +68,8 @@ const Profile = ({ page }) => {
               src={
                 profileData.avatar
                   ? profileData.avatar
-                  : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                  : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                    defaultAvatar
               }
               alt="Avatar"
               onClick={() =>
@@ -88,10 +108,16 @@ const Profile = ({ page }) => {
               </div>
               <div className="profile-2">
                 <p>
-                  <span>{profileData.postCount}</span> {` posts`}
+                  <span>
+                    {profileData.postCount - profileData.archivePostCount}
+                  </span>
+                  {profileData.postCount - profileData.archivePostCount <= 1
+                    ? ` post`
+                    : " posts"}
                 </p>
                 <p onClick={openFollowerHandler}>
-                  <span>{profileData.follower} </span> {` followers`}
+                  <span>{profileData.follower} </span>
+                  {profileData.follower <= 1 ? " follower" : " followers"}
                 </p>
                 <p onClick={openFollowingHandler}>
                   <span>{profileData.following}</span>
@@ -100,7 +126,14 @@ const Profile = ({ page }) => {
               </div>
               <div className="profile-3">
                 <p>{profileData.name}</p>
-                {profileData.bio && <span>{profileData.bio}</span>}
+                {/* {profileData.bio && <span>{profileData.bio}</span>} */}
+                {profileData.bio && (
+                  <span>
+                    <Linkify options={linkifyOptions}>
+                      {profileData.bio}
+                    </Linkify>
+                  </span>
+                )}
                 {profileData.website && (
                   <a
                     href={profileData.website}
@@ -122,20 +155,20 @@ const Profile = ({ page }) => {
           {page === "saved" && profileData.savedCount === 0 && <ProfileSaved />}
 
           {page === "post" && (
-            <InfiniteData detail="post">
+            <InfiniteData size={250} detail="post">
               <ProfilePost />
             </InfiniteData>
           )}
 
           {page === "tagged" && (
-            <InfiniteData detail="taggedPost">
+            <InfiniteData size={250} detail="taggedPost">
               <ProfileTagged />
             </InfiniteData>
           )}
 
-          {page === "saved" && profileData.savedCount >= 0 && (
-            <InfiniteData detail="saved">
-              <ProfileTagged />
+          {page === "saved" && profileData.savedCount > 0 && (
+            <InfiniteData size={250} detail="saved">
+              <ProfileSaved />
             </InfiniteData>
           )}
 

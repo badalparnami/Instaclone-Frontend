@@ -9,6 +9,8 @@ import hashtag from "linkifyjs/plugins/hashtag";
 import { formatDateComments } from "../utils/date";
 import { linkifyOptions } from "../utils/linkify";
 
+import defaultAvatar from "../assets/default-avatar.jpg";
+
 mention(linkify);
 hashtag(linkify);
 
@@ -23,7 +25,8 @@ const PostCaption = ({ isHome, username, caption, date, avatar }) => {
             src={
               avatar
                 ? avatar
-                : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                  defaultAvatar
             }
           />
         </NavLink>

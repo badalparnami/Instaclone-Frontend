@@ -1,11 +1,14 @@
 import React from "react";
 
+import postLogo from "../assets/posts-logo.png";
+
 const ProfilePost = ({ isUser }) => {
   return (
     <div className="profile-display">
       <div className="profile-display-posts">
         <img
-          src={`${process.env.PUBLIC_URL}/images/posts-logo.png`}
+          // src={`${process.env.PUBLIC_URL}/images/posts-logo.png`}
+          src={postLogo}
           height="72px"
           width="64px"
           alt=""

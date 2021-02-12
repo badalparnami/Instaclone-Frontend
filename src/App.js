@@ -17,6 +17,10 @@ import NewPost from "./pages/NewPost/NewPost";
 import User from "./pages/User/User";
 import Snackbar from "./components/Snackbar/Snackbar";
 import Hashtag from "./pages/Hashtag/Hashtag";
+import LoadingScreen from "./components/Loading";
+import ProgressBar from "./components/ProgressBar/ProgressBar";
+import useWindowSize from "./hooks/useWindowSize";
+import PlaceholderPage from "./components/PlaceholderPage";
 
 import "./App.css";
 import "./pages/Suggestions/Suggestions.css";
@@ -24,8 +28,15 @@ import "./pages/Suggestions/Suggestions.css";
 const App = () => {
   const dispatch = useDispatch();
   const { token, loggedIn, logout, error } = useSelector((state) => state.auth);
-  const { error: errorA } = useSelector((state) => state.profile);
+  const { error: errorA, loading } = useSelector((state) => state.profile);
+  const { loading: loadingProgressBar } = useSelector((state) => state.alert);
   const history = useHistory();
+
+  const {
+    location: { pathname },
+  } = history;
+
+  const size = useWindowSize();
 
   useEffect(() => {
     dispatch(authCheckState());
@@ -60,11 +71,11 @@ const App = () => {
     }
   }, [logout]);
 
-  if (token && loggedIn === true) {
+  if (token && loggedIn === true && !loading) {
     routes = (
       <Switch>
         <Route
-          path="/"
+          path={["/", "/signup"]}
           exact
           render={(props) =>
             token && (loggedIn || loggedIn === false) ? (
@@ -158,7 +169,7 @@ const App = () => {
     );
   }
 
-  if (loggedIn === false) {
+  if (loggedIn === false && !loading) {
     routes = (
       <Switch>
         <Route
@@ -195,19 +206,25 @@ const App = () => {
     );
   }
 
+  if (size.width <= 767) {
+    return <PlaceholderPage />;
+  }
+
   return (
     <div className="App">
       <Snackbar />
 
+      {loadingProgressBar && <ProgressBar />}
+
       {token && (loggedIn || loggedIn === false) ? (
         <Nav isLoggedIn={true} />
-      ) : window.location.href === "http://localhost:3000/" ||
-        window.location.href === "http://localhost:3000/signup" ? (
+      ) : pathname === "/" || pathname === "/signup" ? (
         ""
       ) : (
         <Nav isLoggedIn={false} />
       )}
 
+      {loading && <LoadingScreen />}
       {routes}
     </div>
   );

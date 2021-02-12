@@ -9,6 +9,8 @@ import { updateProfile } from "../store/actions/profile";
 import useReq from "../hooks/useReq";
 import Loader from "./Loader/Loader";
 
+import defaultAvatar from "../assets/default-avatar.jpg";
+
 const ProfilePopupUserCard = ({
   username,
   name,
@@ -113,7 +115,8 @@ const ProfilePopupUserCard = ({
               src={
                 avatar
                   ? avatar
-                  : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                  : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                    defaultAvatar
               }
               alt="Avatar"
             />
@@ -155,7 +158,8 @@ const ProfilePopupUserCard = ({
               src={
                 avatar
                   ? avatar
-                  : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                  : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                    defaultAvatar
               }
               alt="Avatar"
             />

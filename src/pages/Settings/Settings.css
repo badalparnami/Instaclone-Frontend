@@ -302,3 +302,7 @@
   padding: 0;
   margin: 0;
 }
+
+.account-data-child .suggestions-page.large .suggestions-card {
+  border: none;
+}

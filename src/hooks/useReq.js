@@ -4,9 +4,9 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 
 import { logoutAsync } from "../store/actions/auth";
-import { showAlert } from "../store/actions/alert";
+import { showAlert, showBar, hideBar } from "../store/actions/alert";
 
-const useReq = () => {
+const useReq = (progressBar) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
@@ -18,6 +18,9 @@ const useReq = () => {
   const root = document.body;
 
   const startFetching = () => {
+    if (progressBar) {
+      dispatch(showBar());
+    }
     setResponse(null);
     setLoading(true);
     setError(null);
@@ -29,6 +32,9 @@ const useReq = () => {
   };
 
   const fetchedData = () => {
+    if (progressBar) {
+      dispatch(hideBar());
+    }
     setLoading(false);
     setError(null);
   };
@@ -65,11 +71,13 @@ const useReq = () => {
         }
       })
       .catch((err) => {
-        setLoading(false);
+        fetchedData();
         if (err.response) {
           if (err.response.status === 401) {
+            root.style.overflow = "auto";
             dispatch(logoutAsync());
           } else if (err.response.status === 404) {
+            root.style.overflow = "auto";
             history.push("/404");
           } else {
             // setError(err.response.data.message);

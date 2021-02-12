@@ -6,6 +6,8 @@ import PopupHelper from "../../components/PopupHelper";
 import Search from "../Search/Search";
 import useReq from "../../hooks/useReq";
 
+import defaultAvatar from "../../assets/default-avatar.jpg";
+
 const NewPostCaption = ({
   setPage,
   setCaption,
@@ -70,7 +72,8 @@ const NewPostCaption = ({
             src={
               avatar
                 ? avatar
-                : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                  defaultAvatar
             }
             alt="Avatar"
           />

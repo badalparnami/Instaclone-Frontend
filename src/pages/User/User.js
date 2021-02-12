@@ -13,6 +13,8 @@ import LoginModal from "../../components/LoginModal";
 import InfiniteData from "../../components/InfiniteData";
 import InfiniteData2 from "../../components/InfiniteData2";
 
+import defaultAvatar from "../../assets/default-avatar.jpg";
+
 const notAllowedUsernames = [
   "signup",
   "profile",
@@ -43,6 +45,7 @@ const User = ({ page }) => {
   const { blockedCount } = useSelector((state) => state.profile);
 
   const [openLoginModal, setOpenLoginModal] = useState(false);
+  const [openMutualsHandler, setOpenMutualsHandler] = useState(false);
 
   const {
     requestData: requestDataBlock,
@@ -51,6 +54,12 @@ const User = ({ page }) => {
   } = useReq();
 
   const { id } = useParams();
+
+  useEffect(() => {
+    if (response !== null) {
+      document.title = `${response.user.name} (@${response.user.username}) • Instagram photos`;
+    }
+  }, [response]);
 
   useEffect(() => {
     if (loggedIn !== undefined) {
@@ -140,7 +149,8 @@ const User = ({ page }) => {
               src={
                 response.user.avatar
                   ? response.user.avatar
-                  : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                  : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                    defaultAvatar
               }
               alt="Avatar"
               style={{ cursor: "default" }}
@@ -180,10 +190,14 @@ const User = ({ page }) => {
               </div>
               <div className="profile-2">
                 <p>
-                  <span>{response.user.postCount}</span> {` posts`}
+                  <span>{response.user.postCount}</span>
+                  {response.user.postCount <= 1 ? ` post` : ` posts`}
                 </p>
                 <p onClick={openFollowerHandler}>
-                  <span>{response.user.followerCount} </span> {` followers`}
+                  <span>{response.user.followerCount} </span>
+                  {response.user.followerCount <= 1
+                    ? ` follower`
+                    : ` followers`}
                 </p>
                 <p onClick={openFollowingHandler}>
                   <span>{response.user.followingCount}</span>
@@ -203,6 +217,31 @@ const User = ({ page }) => {
                   </a>
                 )}
               </div>
+              {response.mutuals && response.mutuals.length > 0 && (
+                <div
+                  onClick={() => setOpenMutualsHandler(true)}
+                  className="profile-4"
+                >
+                  {response.mutuals.length === 1 && (
+                    <span>
+                      Followed by <span>{response.mutuals[0].username}</span>
+                    </span>
+                  )}
+                  {response.mutuals.length === 2 && (
+                    <span>
+                      Followed by <span>{response.mutuals[0].username}</span>{" "}
+                      and <span>{response.mutuals[1].username}</span>
+                    </span>
+                  )}
+                  {response.mutuals.length > 2 && (
+                    <span>
+                      Followed by <span>{response.mutuals[0].username}</span>,{" "}
+                      <span>{response.mutuals[1].username}</span> and{" "}
+                      <span>{response.mutuals.length - 2} others.</span>
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           </div>
           {((response.user.private && response.relation === "Following") ||
@@ -225,13 +264,19 @@ const User = ({ page }) => {
               )}
 
               {page === "post" && response.user.postCount > 0 && fetchPost && (
-                <InfiniteData isUser={true} detail="post" username={id} />
+                <InfiniteData
+                  size={250}
+                  isUser={true}
+                  detail="post"
+                  username={id}
+                />
               )}
 
               {page === "tagged" &&
                 response.user.taggedPostCount > 0 &&
                 fetchTaggedPost && (
                   <InfiniteData
+                    size={250}
                     isUser={true}
                     detail="taggedPost"
                     username={id}
@@ -281,16 +326,37 @@ const User = ({ page }) => {
               />
             )}
 
-          {response.user.followerCount > 0 &&
-            fetchFollower &&
-            openFollowing && (
-              <InfiniteData2
-                detail="follower"
-                headingMain="Followers"
+          {response.user.followerCount > 0 && fetchFollower && openFollower && (
+            <InfiniteData2
+              detail="follower"
+              headingMain="Followers"
+              isUser={true}
+              onClickFn={setOpenFollower}
+              username={id}
+            />
+          )}
+
+          {openMutualsHandler &&
+            response.mutuals &&
+            response.mutuals.length > 0 && (
+              <Modal
+                onClick={setOpenMutualsHandler}
+                headingMain="Followed by you"
+                isOptions={false}
                 isUser={true}
-                onClickFn={setOpenFollower}
-                username={id}
-              />
+              >
+                {response.mutuals.map((f) => (
+                  <ProfilePopupUserCard
+                    name={f.name}
+                    username={f.username}
+                    relation="Following"
+                    key={f.username}
+                    avatar={f.avatar}
+                    // alwaysFetch={true}
+                    // fetchData={fetchData}
+                  />
+                ))}
+              </Modal>
             )}
 
           {openOptions && (

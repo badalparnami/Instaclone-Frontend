@@ -1,5 +1,7 @@
 import React from "react";
 
+import defaultAvatar from "../assets/default-avatar.jpg";
+
 const SearchUserCard = ({
   username,
   name,
@@ -19,7 +21,8 @@ const SearchUserCard = ({
           src={
             avatar
               ? avatar
-              : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+              : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                defaultAvatar
           }
           alt=""
         />

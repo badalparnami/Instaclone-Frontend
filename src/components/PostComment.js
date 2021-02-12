@@ -13,6 +13,8 @@ import Modal from "./Modal/Modal";
 import { linkifyOptions } from "../utils/linkify";
 import LoginModal from "./LoginModal";
 
+import defaultAvatar from "../assets/default-avatar.jpg";
+
 mention(linkify);
 hashtag(linkify);
 
@@ -42,11 +44,13 @@ const PostComment = ({
     requestData: requestDataLike,
     response: responseLike,
     clear: clearLike,
-  } = useReq();
+  } = useReq(true);
 
   const [deleteModal, setDeleteModal] = useState(false);
 
-  const { requestData: requestDataDelete, response: responseDelete } = useReq();
+  const { requestData: requestDataDelete, response: responseDelete } = useReq(
+    true
+  );
 
   const { loggedIn } = useSelector((state) => state.auth);
   const [openLoginModal, setOpenLoginModal] = useState(false);
@@ -104,7 +108,8 @@ const PostComment = ({
             src={
               avatar
                 ? avatar
-                : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                  defaultAvatar
             }
           />
         </NavLink>

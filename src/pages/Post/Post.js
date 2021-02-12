@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
+import Skeleton from "react-loading-skeleton";
+import { NavLink } from "react-router-dom";
 import "./Post.css";
 
 import PostCTA from "../../components/PostCTA";
@@ -11,10 +13,14 @@ import PostCommentMain from "./PostCommentMain";
 import { formatDatePost } from "../../utils/date";
 import LoginModal from "../../components/LoginModal";
 
+const randomNum = () => {
+  return Math.floor(Math.random() * 70) + 20;
+};
+
 const Post = (props) => {
   const { loggedIn } = useSelector((state) => state.auth);
   const profileData = useSelector((state) => state.profile);
-  const { requestData, response, clear } = useReq();
+  const { requestData, response, clear, loading } = useReq();
   const {
     requestData: requestDataCommments,
     response: responseComments,
@@ -30,9 +36,18 @@ const Post = (props) => {
   const [postComments, setPostComments] = useState([]);
   const [current, setCurrent] = useState(1);
   const [openLoginModal, setOpenLoginModal] = useState(false);
+  const [totalComments, setTotalComments] = useState(0);
+  const [openTagContainer, setOpenTagContainer] = useState(false);
 
   const commentRef = useRef();
   const likeRef = useRef();
+  const commentDivRef = useRef();
+
+  useEffect(() => {
+    if (response !== null && !updatedState) {
+      document.title = `${response.postDetails.creatorUsername} on Instagram: ${response.postDetails.caption}`;
+    }
+  }, [response]);
 
   useEffect(() => {
     if (loggedIn !== undefined) {
@@ -48,6 +63,7 @@ const Post = (props) => {
       setIsLiked(response.postDetails.isLiked);
       setIsSaved(response.postDetails.isSaved);
       setPostComments(response.postDetails.comment);
+      setTotalComments(response.postDetails.totalComments);
       setUpdatedState(true);
     }
   }, [response, updatedState]);
@@ -80,10 +96,12 @@ const Post = (props) => {
         username: profileData.username,
       },
     ]);
+    commentDivRef.current.scrollTop = commentDivRef.current.scrollHeight;
   };
 
   const deleteComment = (id) => {
     setPostComments((prev) => prev.filter((c) => c.id != id));
+    setTotalComments((prev) => prev - 1);
   };
 
   const moreCommentsHandler = () => {
@@ -97,6 +115,36 @@ const Post = (props) => {
     );
   };
 
+  if (loading) {
+    return (
+      <main className="post-page">
+        <div className="post-page-container">
+          <div className="post-image">
+            <Skeleton height={610} width={450} />
+          </div>
+          <div className="post-details">
+            <div className="post-header">
+              <Skeleton circle={true} height={30} width={30} />
+              <Skeleton width={70} />
+            </div>
+            <div
+              className="post-comments"
+              style={{ paddingLeft: 4, paddingRight: 4 }}
+            >
+              <Skeleton height={431} />
+            </div>
+            <div className="post-stats">
+              <Skeleton />
+            </div>
+            <div className="post-add_comment">
+              <Skeleton width={309} />
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="post-page">
       {response && updatedState && (
@@ -107,6 +155,41 @@ const Post = (props) => {
               alt=" "
               style={response.postDetails.styles}
             />
+            {openTagContainer && (
+              <div className="tag-container">
+                {response.postDetails.tag &&
+                  response.postDetails.tag.map((t) => {
+                    const num = `${randomNum()}%`;
+                    return (
+                      <div
+                        style={{
+                          left: num,
+                          transform: `translate(-${num}, 0%)`,
+                          top: `${randomNum()}%`,
+                        }}
+                        key={t}
+                        className="tag"
+                      >
+                        <NavLink to={`/${t}`}>
+                          <span></span>
+                          <span>{t}</span>
+                        </NavLink>
+                      </div>
+                    );
+                  })}
+              </div>
+            )}
+            <div
+              onClick={() => {
+                setOpenTagContainer((prev) => !prev);
+                setTimeout(() => {
+                  setOpenTagContainer((prev) => !prev);
+                }, 2500);
+              }}
+              className="tag-button"
+            >
+              <span></span>
+            </div>
           </div>
           <div className="post-details">
             <PostHeader
@@ -123,7 +206,7 @@ const Post = (props) => {
               isPrivate={response.private}
               avatar={response.postDetails.avatar}
             />
-            <div className="post-comments">
+            <div ref={commentDivRef} className="post-comments">
               {response.postDetails.caption && (
                 <PostCaption
                   caption={response.postDetails.caption}
@@ -151,7 +234,7 @@ const Post = (props) => {
                 />
               ))}
 
-              {response.postDetails.totalComments > postComments.length && (
+              {totalComments > postComments.length && (
                 <div onClick={moreCommentsHandler} className="more-comments">
                   <span></span>
                 </div>

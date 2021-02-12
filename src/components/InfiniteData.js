@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import useReq from "../hooks/useReq";
 import ImageWOverlay from "./ImageWOverlay";
+import Skeleton from "react-loading-skeleton";
 
-const InfiniteData = ({ detail, children, isUser, username }) => {
+const placeholderArr = [0, 1, 2, 3, 4, 5];
+
+const InfiniteData = ({ detail, children, isUser, username, size }) => {
   const [total, setTotal] = useState(null);
   const [curPage, setCurPage] = useState(0);
   const [data, setData] = useState([]);
-  const { requestData, response, clear } = useReq();
+  const { requestData, response, clear, loading } = useReq();
 
   useEffect(() => {
     fetchMoreData();
@@ -34,6 +37,14 @@ const InfiniteData = ({ detail, children, isUser, username }) => {
 
   return (
     <>
+      {loading && total === null && (
+        <div className="profile-images">
+          {placeholderArr.map((a) => (
+            <Skeleton key={a} height={size} />
+          ))}
+        </div>
+      )}
+
       {data.length > 0 && (
         <InfiniteScroll
           dataLength={data.length}

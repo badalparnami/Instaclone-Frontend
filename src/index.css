@@ -60,3 +60,39 @@ button {
   width: 10rem !important;
   margin: 0 !important;
 }
+
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loading-screen img,
+.loading-screen svg {
+  height: 5rem;
+  fill: #999;
+}
+
+.infinite-scroll-component {
+  overflow: inherit !important;
+}
+
+@media (max-width: 767px) {
+  html {
+    height: 100%;
+  }
+  body {
+    background-color: #009688;
+    background-image: url(./placeholder-image.jpg);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    overflow: hidden;
+  }
+}

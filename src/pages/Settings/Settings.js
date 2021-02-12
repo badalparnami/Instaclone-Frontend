@@ -18,6 +18,22 @@ const Settings = ({ page, subpage }) => {
     setIsTokenRendered(true);
   }, []);
 
+  useEffect(() => {
+    let title = "Settings";
+    title =
+      page === "edit"
+        ? "Edit Profile"
+        : page === "password"
+        ? "Change Password"
+        : page === "privacy"
+        ? "Privacy and Security"
+        : "Account Data";
+    // title = page === "password" && "Change Password";
+    // title = page === "privacy" && "Privacy and Security";
+    // title = page === "data" && "Account Data";
+    document.title = title;
+  }, [page]);
+
   if (!token && isTokenRendered) {
     return <Redirect to="/" />;
   } else if (!isTokenRendered) {

@@ -53,6 +53,10 @@ const Auth = ({ isLoginPage }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    document.title = isLogin ? "Login • Instagram" : "Signup • Instagram";
+  }, [isLogin]);
+
+  useEffect(() => {
     if (error !== null) {
       dispatch(showAlert(error));
       setError(null);

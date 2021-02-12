@@ -118,6 +118,8 @@ const PostCommentMain = ({
   const deleteComment = (isReply, id) => {
     if (isReply) {
       setCommentReply((prev) => prev.filter((c) => c.id !== id));
+      setCommentReplyCount((prev) => prev - 1);
+      setCommentRepliesNum((prev) => prev - 1);
     } else {
       deleteCommentMain(id);
     }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Skeleton from "react-loading-skeleton";
 
 import useReq from "../../hooks/useReq";
 
@@ -7,11 +8,24 @@ import "./Explore.css";
 
 import ImageWOverlay from "../../components/ImageWOverlay";
 
+const placeholderArr = [0, 1, 2, 3];
+
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+};
+
 const Explore = () => {
   const [total, setTotal] = useState(null);
   const [curPage, setCurPage] = useState(0);
   const [data, setData] = useState([]);
-  const { requestData, response, clear } = useReq();
+  const { requestData, response, clear, loading } = useReq();
+
+  useEffect(() => {
+    document.title = "Instagram";
+  }, []);
 
   useEffect(() => {
     fetchMoreData();
@@ -19,7 +33,9 @@ const Explore = () => {
 
   useEffect(() => {
     if (response !== null) {
-      setData([...data, ...response.detail]);
+      const posts = response.detail;
+      shuffleArray(posts);
+      setData([...data, ...posts]);
       if (total === null) {
         setTotal(response.total);
       }
@@ -34,6 +50,15 @@ const Explore = () => {
 
   return (
     <>
+      {loading && (
+        <main className="explore-page profile-images">
+          <Skeleton height={200} />
+          <Skeleton height={440} />
+          {placeholderArr.map((a) => (
+            <Skeleton key={a} height={200} />
+          ))}
+        </main>
+      )}
       {setData.length > 0 && (
         <InfiniteScroll
           dataLength={data.length}

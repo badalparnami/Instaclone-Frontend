@@ -108,6 +108,18 @@ main.profile-page {
   font-size: 1.6rem;
 }
 
+.profile-4 {
+  color: #8e8e8e;
+  font-size: 1.2rem;
+  margin-top: 1.4rem;
+  cursor: pointer;
+}
+
+.profile-4 span span {
+  font-weight: 500;
+  color: #262626;
+}
+
 .profile-categories {
   display: flex;
   justify-content: center;

@@ -1,11 +1,14 @@
 import React from "react";
 
+import savedLogo from "../assets/saved-logo.png";
+
 const ProfileSaved = () => {
   return (
     <div className="profile-display">
       <div className="profile-display-saved">
         <img
-          src={`${process.env.PUBLIC_URL}/images/saved-logo.png`}
+          // src={`${process.env.PUBLIC_URL}/images/saved-logo.png`}
+          src={savedLogo}
           height="72px"
           width="64px"
           alt=""

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import useReq from "../hooks/useReq";
 import SuggestionCard from "./SuggestionCard";
+import Skeleton from "react-loading-skeleton";
 
 const InfiniteData3 = ({ detail, children }) => {
   const [total, setTotal] = useState(null);
   const [curPage, setCurPage] = useState(0);
   const [data, setData] = useState([]);
-  const { requestData, response, clear } = useReq();
+  const { requestData, response, clear, loading } = useReq();
 
   useEffect(() => {
     fetchMoreData();
@@ -30,6 +31,15 @@ const InfiniteData3 = ({ detail, children }) => {
 
   return (
     <>
+      {loading && total === null && (
+        <div className="suggestions-page large" style={{ lineHeight: "3" }}>
+          {/* {placeholderArr.map((a) => (
+            <Skeleton height={25} />
+          ))} */}
+          <Skeleton height={35} count={5} />
+        </div>
+      )}
+
       {data.length > 0 && (
         <InfiniteScroll
           dataLength={data.length}

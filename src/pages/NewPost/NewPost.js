@@ -33,6 +33,10 @@ const PostUpload = ({ location }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    document.title = "Instagram";
+  }, []);
+
+  useEffect(() => {
     if (typeof location.state === "undefined") {
       setIsImage(false);
     } else {

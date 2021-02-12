@@ -16,6 +16,10 @@ const Hashtag = () => {
   const { id } = useParams();
 
   useEffect(() => {
+    document.title = `#${id} hashtag on Instagram`;
+  }, []);
+
+  useEffect(() => {
     fetchMoreData();
   }, []);
 

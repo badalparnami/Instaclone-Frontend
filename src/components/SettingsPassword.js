@@ -4,6 +4,8 @@ import SettingsFormGroup from "./SettingsFormGroup";
 import useReq from "../hooks/useReq";
 import Loader from "./Loader/Loader";
 
+import defaultAvatar from "../assets/default-avatar290.jpg";
+
 const SettingsPassword = ({ username, avatar }) => {
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
@@ -69,7 +71,8 @@ const SettingsPassword = ({ username, avatar }) => {
             src={
               avatar
                 ? avatar
-                : `${process.env.PUBLIC_URL}/images/default-avatar290.jpg`
+                : // : `${process.env.PUBLIC_URL}/images/default-avatar290.jpg`
+                  defaultAvatar
             }
             alt=""
             width="100%"

@@ -8,6 +8,8 @@ import useReq from "../hooks/useReq";
 import AvatarUploader from "./AvatarUploader";
 import Loader from "./Loader/Loader";
 
+import defaultAvatar from "../assets/default-avatar290.jpg";
+
 function validURL(str) {
   var pattern = new RegExp(
     "^(https?:\\/\\/)?" + // protocol
@@ -30,6 +32,15 @@ const notAllowedUsernames = [
   "404",
 ];
 
+const linkAppender = (link) => {
+  let website = link;
+  if (!website.includes("http://") && !website.includes("https://")) {
+    website = "https://" + website;
+  }
+
+  return website;
+};
+
 const SettingsEditProfile = ({
   nameP,
   usernameP,
@@ -49,6 +60,7 @@ const SettingsEditProfile = ({
   const [updateObj, setUpdateObj] = useState(null);
 
   const dispatch = useDispatch();
+  const root = document.body;
 
   let updatesObj = {};
   const {
@@ -64,7 +76,7 @@ const SettingsEditProfile = ({
     requestData: requestData2,
     response: response2,
     clear: clear2,
-  } = useReq();
+  } = useReq(true);
 
   const [openPicker, setOpenPicker] = useState(false);
   const [avatarOptions, setAvatarOptions] = useState(false);
@@ -152,18 +164,23 @@ const SettingsEditProfile = ({
 
     if (username !== usernameP && isUsernameChangeAllowed) {
       updates.push({ change: "username", value: username });
-      updatesObj = { ...updatesObj, username };
+      updatesObj = {
+        ...updatesObj,
+        username,
+        isUsernameChangeAllowed: false,
+        lastUsername: usernameP,
+      };
     }
 
     if (website !== websiteP) {
-      if (websiteP !== null && website.length !== 0) {
-        updates.push({ change: "website", value: website });
-        updatesObj = { ...updatesObj, website };
+      if (website.length !== 0 || (websiteP !== null && website.length === 0)) {
+        updates.push({ change: "website", value: linkAppender(website) });
+        updatesObj = { ...updatesObj, website: linkAppender(website) };
       }
     }
 
     if (bio !== bioP) {
-      if (bioP !== null && bio.length !== 0) {
+      if (bio.length !== 0 || (bioP !== null && bio.length === 0)) {
         updates.push({ change: "bio", value: bio });
         updatesObj = { ...updatesObj, bio };
       }
@@ -184,6 +201,7 @@ const SettingsEditProfile = ({
   };
 
   const revertUsername = () => {
+    root.style.overflow = "auto";
     setOpenRevertModal(false);
     if (lastUsername) {
       requestData2("post", "user/revert");
@@ -199,7 +217,8 @@ const SettingsEditProfile = ({
               src={
                 avatar
                   ? avatar
-                  : `${process.env.PUBLIC_URL}/images/default-avatar290.jpg`
+                  : // : `${process.env.PUBLIC_URL}/images/default-avatar290.jpg`
+                    defaultAvatar
               }
               alt=""
               width="100%"
@@ -282,7 +301,7 @@ const SettingsEditProfile = ({
         <SettingsFormGroup
           label="Email"
           type="email"
-          placeholder="website"
+          placeholder="email"
           isRequired={true}
           value={email}
           onChange={setEmail}

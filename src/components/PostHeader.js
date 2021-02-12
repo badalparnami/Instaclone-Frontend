@@ -7,6 +7,8 @@ import useReq from "../hooks/useReq";
 import ProfilePopupUserCard from "./ProfilePopupUserCard";
 import { updateProfile } from "../store/actions/profile";
 
+import defaultAvatar from "../assets/default-avatar.jpg";
+
 const PostHeader = ({
   isHome,
   username,
@@ -34,31 +36,31 @@ const PostHeader = ({
     clear: clearComment,
     response: responseComment,
     alertHandler,
-  } = useReq();
+  } = useReq(true);
 
   const {
     requestData: requestDataArchive,
     clear: clearArchive,
     response: responseArchive,
-  } = useReq();
+  } = useReq(true);
 
   const {
     requestData: requestDataPendingTag,
     clear: clearPendingTag,
     response: responsePendingTag,
-  } = useReq();
+  } = useReq(true);
 
   const {
     requestData: requestDataRemoveTag,
     clear: clearRemoveTag,
     response: responseRemoveTag,
-  } = useReq();
+  } = useReq(true);
 
   const {
     requestData: requestDataDeletePost,
     clear: clearDeletePost,
     response: responseDeletePost,
-  } = useReq();
+  } = useReq(true);
 
   const dispatch = useDispatch();
   const { archivePostCount, postCount } = useSelector((state) => state.profile);
@@ -107,7 +109,7 @@ const PostHeader = ({
 
   useEffect(() => {
     if (responseDeletePost !== null) {
-      alertHandler("Deleted post", setOpenOptions, true);
+      alertHandler("Post deleted", setOpenOptions, true);
       dispatch(updateProfile({ postCount: postCount - 1 }));
       history.push("/profile");
 
@@ -128,7 +130,7 @@ const PostHeader = ({
   };
 
   const removePostTagHandler = () => {
-    requestDataRemoveTag("post", "post/removetag", { postId, username });
+    requestDataRemoveTag("post", "post/removetag", { postId });
   };
 
   const deletePostHandler = () => {
@@ -144,7 +146,8 @@ const PostHeader = ({
           src={
             avatar
               ? avatar
-              : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+              : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                defaultAvatar
           }
         />
       </NavLink>

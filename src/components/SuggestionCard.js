@@ -2,6 +2,8 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import ProfilePopupUserCard from "./ProfilePopupUserCard";
 
+import defaultAvatar from "../assets/default-avatar.jpg";
+
 const SuggestionCard = ({ avatar, username, name, relation }) => {
   return (
     <div className="suggestion-card">
@@ -10,7 +12,8 @@ const SuggestionCard = ({ avatar, username, name, relation }) => {
           src={
             avatar
               ? avatar
-              : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+              : // : `${process.env.PUBLIC_URL}/images/default-avatar.jpg`
+                defaultAvatar
           }
           alt="Avatar"
         />
