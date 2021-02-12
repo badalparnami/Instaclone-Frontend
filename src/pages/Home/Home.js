@@ -12,9 +12,17 @@ import Suggestions from "../Suggestions/Suggestions";
 
 import defaultAvatar from "../../assets/default-avatar.jpg";
 
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+};
+
 const Home = () => {
   const { requestData, response, clear, loading } = useReq();
   const [homePosts, setHomePosts] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
 
   const [total, setTotal] = useState(null);
   const [curPage, setCurPage] = useState(0);
@@ -25,6 +33,7 @@ const Home = () => {
     requestData: requestDataS,
     response: responseS,
     loading: loadingS,
+    clear: clearS,
   } = useReq();
 
   useEffect(() => {
@@ -50,6 +59,15 @@ const Home = () => {
       clear();
     }
   }, [response]);
+
+  useEffect(() => {
+    if (responseS !== null) {
+      const suggestions = responseS.users;
+      shuffleArray(suggestions);
+      setSuggestions(suggestions);
+      clearS();
+    }
+  }, [responseS]);
 
   const fetchMoreData = () => {
     requestData("get", `post/feed/${curPage}`);
@@ -127,11 +145,11 @@ const Home = () => {
               </div>
             </div>
             {loadingS && <Skeleton count={5} />}
-            {responseS && responseS.users && responseS.users.length > 0 && (
+            {suggestions && suggestions.length > 0 && (
               <div className="suggestions-page small">
                 <h1>Suggestions For You</h1>
                 <div className="suggestions-card">
-                  {responseS.users.map((u) => (
+                  {suggestions.map((u) => (
                     <SuggestionCard
                       avatar={u.avatar}
                       name={u.name}
@@ -147,14 +165,15 @@ const Home = () => {
       )}
 
       {homePosts && homePosts.length === 0 && loadingS && (
-        <div className="suggestions-page large" style={{ lineHeight: "2" }}>
-          <Skeleton count={20} />
+        <div className="suggestions-page large" style={{ lineHeight: "3" }}>
+          <Skeleton count={10} />
         </div>
       )}
 
-      {homePosts && homePosts.length === 0 && responseS && (
-        <Suggestions suggestions={responseS.users} />
-      )}
+      {homePosts &&
+        homePosts.length === 0 &&
+        suggestions &&
+        suggestions.length > 0 && <Suggestions suggestions={suggestions} />}
     </>
   );
 };

@@ -104,7 +104,9 @@ const Auth = ({ isLoginPage }) => {
       }
 
       if (!/^[a-zA-Z]([a-zA-Z]+){2,}(\s[a-zA-Z]([a-zA-Z]+)*)?$/.test(name)) {
-        setError("Only alphabets allowed in name");
+        setError(
+          "Only alphabets allowed in name & only first and last name is allowed"
+        );
         return;
       }
 

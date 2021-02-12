@@ -179,17 +179,19 @@ const Post = (props) => {
                   })}
               </div>
             )}
-            <div
-              onClick={() => {
-                setOpenTagContainer((prev) => !prev);
-                setTimeout(() => {
+            {response.postDetails.tag && response.postDetails.tag.length > 0 && (
+              <div
+                onClick={() => {
                   setOpenTagContainer((prev) => !prev);
-                }, 2500);
-              }}
-              className="tag-button"
-            >
-              <span></span>
-            </div>
+                  setTimeout(() => {
+                    setOpenTagContainer((prev) => !prev);
+                  }, 2500);
+                }}
+                className="tag-button"
+              >
+                <span></span>
+              </div>
+            )}
           </div>
           <div className="post-details">
             <PostHeader
