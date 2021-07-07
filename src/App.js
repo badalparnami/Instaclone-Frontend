@@ -169,7 +169,7 @@ const App = () => {
     );
   }
 
-  if (loggedIn === false && loading !== null) {
+  if (loggedIn === false) {
     routes = (
       <Switch>
         <Route
