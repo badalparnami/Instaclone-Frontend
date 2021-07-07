@@ -19,8 +19,15 @@ const InfiniteData2 = ({
   const [data, setData] = useState([]);
   const { requestData, response, clear, loading } = useReq();
 
+  const root = document.body;
+
   useEffect(() => {
     fetchMoreData();
+
+    return () => {
+      onClickFn(false);
+      root.style.overflow = "auto";
+    };
   }, [detail]);
 
   useEffect(() => {

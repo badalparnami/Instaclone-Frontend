@@ -62,7 +62,7 @@ const User = ({ page }) => {
   }, [response]);
 
   useEffect(() => {
-    if (loggedIn !== undefined) {
+    if (loggedIn !== null) {
       fetchData();
     }
   }, [loggedIn, id]);
@@ -165,7 +165,9 @@ const User = ({ page }) => {
                   username={response.user.username}
                   fetchData={fetchData}
                   isPrivate={response.user.private}
-                  alwaysFetch={true}
+                  // alwaysFetch={true}
+                  alwaysFetch={response.user.private}
+                  avatar={response.user.avatar}
                 />
 
                 <div

@@ -71,7 +71,7 @@ const App = () => {
     }
   }, [logout]);
 
-  if (token && loggedIn === true && !loading) {
+  if (token && loggedIn === true && loading !== null) {
     routes = (
       <Switch>
         <Route
@@ -169,7 +169,7 @@ const App = () => {
     );
   }
 
-  if (loggedIn === false && !loading) {
+  if (loggedIn === false && loading !== null) {
     routes = (
       <Switch>
         <Route

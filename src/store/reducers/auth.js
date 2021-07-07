@@ -2,7 +2,7 @@ const initialState = {
   token: null,
   error: null,
   loading: false,
-  loggedIn: undefined,
+  loggedIn: null,
   logout: false,
 };
 

@@ -1,6 +1,6 @@
 const initialState = {
   error: null,
-  loading: false,
+  loading: null,
   name: null,
   email: null,
   username: null,

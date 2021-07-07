@@ -50,7 +50,7 @@ const Post = (props) => {
   }, [response]);
 
   useEffect(() => {
-    if (loggedIn !== undefined) {
+    if (loggedIn !== null) {
       fetchData();
     }
   }, [loggedIn]);

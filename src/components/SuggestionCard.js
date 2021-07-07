@@ -26,6 +26,7 @@ const SuggestionCard = ({ avatar, username, name, relation }) => {
         isPostHeader={true}
         username={username}
         relation={relation ? relation : "Follow"}
+        avatar={avatar}
       />
       {/* className = "active" || changed to 'profile-following' */}
     </div>

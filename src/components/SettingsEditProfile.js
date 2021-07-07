@@ -34,6 +34,10 @@ const notAllowedUsernames = [
 
 const linkAppender = (link) => {
   let website = link;
+  if (website.length === 0) {
+    return website;
+  }
+
   if (!website.includes("http://") && !website.includes("https://")) {
     website = "https://" + website;
   }

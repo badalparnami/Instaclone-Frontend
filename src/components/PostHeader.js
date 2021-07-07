@@ -164,6 +164,7 @@ const PostHeader = ({
             username={username}
             fetchData={fetchData}
             isPrivate={isPrivate}
+            avatar={avatar}
           />
         </>
       )}

@@ -23,8 +23,8 @@ const ProfilePopupUserCard = ({
 }) => {
   const [relationship, setRelationship] = useState(relation);
   const [openPopup, setOpenPopup] = useState(false);
-  const [followingNum, setFollowingNum] = useState(0);
-  const [followNum, setFollowNum] = useState(0);
+  // const [followingNum, setFollowingNum] = useState(0);
+  // const [followNum, setFollowNum] = useState(0);
 
   const [openLoginModal, setOpenLoginModal] = useState(false);
 
@@ -42,27 +42,29 @@ const ProfilePopupUserCard = ({
     setOpenPopup(!openPopup);
   };
 
+  /*
   useEffect(() => {
     if (followingNum !== 0) {
       return () =>
-        dispatch(
-          updateProfile({
-            following: following + followingNum,
-          })
-        );
+      dispatch(
+        updateProfile({
+          following: following + followingNum,
+        })
+      );
     }
   }, [followingNum]);
 
   useEffect(() => {
     if (followNum !== 0) {
       return () =>
-        dispatch(
-          updateProfile({
-            follower: follower + followNum,
-          })
-        );
+      dispatch(
+        updateProfile({
+          follower: follower + followNum,
+        })
+      );
     }
   }, [followNum]);
+  */
 
   useEffect(() => {
     if (response !== null) {
@@ -71,14 +73,29 @@ const ProfilePopupUserCard = ({
       }
 
       if (relationship === "Following") {
-        setFollowingNum((prev) => prev - 1);
+        // setFollowingNum((prev) => prev - 1);
+        dispatch(
+          updateProfile({
+            following: following - 1,
+          })
+        );
       } else if (
         relationship === "Follow" &&
         response.relation === "Following"
       ) {
-        setFollowingNum((prev) => prev + 1);
+        // setFollowingNum((prev) => prev + 1);
+        dispatch(
+          updateProfile({
+            following: following + 1,
+          })
+        );
       } else if (relationship === "Approve") {
-        setFollowNum((prev) => prev + 1);
+        // setFollowNum((prev) => prev + 1);
+        dispatch(
+          updateProfile({
+            follower: follower + 1,
+          })
+        );
       }
 
       if (relationship === "Unblock") {
