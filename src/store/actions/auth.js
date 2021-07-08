@@ -113,7 +113,6 @@ export const auth = (email, password, isLogin, username, name) => {
 
 export const authCheckState = () => {
   return (dispatch) => {
-    dispatch(authStart());
     const token = localStorage.getItem("token");
     if (!token) {
       // dispatch(logout());

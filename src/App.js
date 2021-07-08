@@ -17,7 +17,6 @@ import NewPost from "./pages/NewPost/NewPost";
 import User from "./pages/User/User";
 import Snackbar from "./components/Snackbar/Snackbar";
 import Hashtag from "./pages/Hashtag/Hashtag";
-import LoadingScreen from "./components/Loading";
 import ProgressBar from "./components/ProgressBar/ProgressBar";
 import useWindowSize from "./hooks/useWindowSize";
 import PlaceholderPage from "./components/PlaceholderPage";
@@ -27,13 +26,7 @@ import "./pages/Suggestions/Suggestions.css";
 
 const App = () => {
   const dispatch = useDispatch();
-  const {
-    token,
-    loggedIn,
-    logout,
-    error,
-    loading: loadingToken,
-  } = useSelector((state) => state.auth);
+  const { token, loggedIn, logout, error } = useSelector((state) => state.auth);
   const { error: errorA, loading } = useSelector((state) => state.profile);
   const { loading: loadingProgressBar } = useSelector((state) => state.alert);
   const history = useHistory();
@@ -230,7 +223,6 @@ const App = () => {
         <Nav isLoggedIn={false} />
       )}
 
-      {loadingToken && <LoadingScreen />}
       {routes}
     </div>
   );
