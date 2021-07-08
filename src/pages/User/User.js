@@ -12,6 +12,7 @@ import { updateProfile } from "../../store/actions/profile";
 import LoginModal from "../../components/LoginModal";
 import InfiniteData from "../../components/InfiniteData";
 import InfiniteData2 from "../../components/InfiniteData2";
+import ProfileSkeleton from "../../components/ProfileSkeleton";
 
 import defaultAvatar from "../../assets/default-avatar.jpg";
 
@@ -39,7 +40,7 @@ const User = ({ page }) => {
 
   const root = document.body;
   const history = useHistory();
-  const { requestData, response, clear } = useReq();
+  const { requestData, response, clear, loading } = useReq();
 
   const dispatch = useDispatch();
   const { blockedCount } = useSelector((state) => state.profile);
@@ -139,6 +140,10 @@ const User = ({ page }) => {
       username: response.user.username,
     });
   };
+
+  if (loading) {
+    return <ProfileSkeleton />;
+  }
 
   return (
     <>

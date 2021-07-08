@@ -27,7 +27,13 @@ import "./pages/Suggestions/Suggestions.css";
 
 const App = () => {
   const dispatch = useDispatch();
-  const { token, loggedIn, logout, error } = useSelector((state) => state.auth);
+  const {
+    token,
+    loggedIn,
+    logout,
+    error,
+    loading: loadingToken,
+  } = useSelector((state) => state.auth);
   const { error: errorA, loading } = useSelector((state) => state.profile);
   const { loading: loadingProgressBar } = useSelector((state) => state.alert);
   const history = useHistory();
@@ -224,7 +230,7 @@ const App = () => {
         <Nav isLoggedIn={false} />
       )}
 
-      {loading && <LoadingScreen />}
+      {loadingToken && <LoadingScreen />}
       {routes}
     </div>
   );

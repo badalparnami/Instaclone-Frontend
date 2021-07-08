@@ -19,6 +19,7 @@ import InfiniteData from "../../components/InfiniteData";
 import InfiniteData2 from "../../components/InfiniteData2";
 import { logoutAsync } from "../../store/actions/auth";
 import { linkifyOptions } from "../../utils/linkify";
+import ProfileSkeleton from "../../components/ProfileSkeleton";
 
 import defaultAvatar from "../../assets/default-avatar.jpg";
 
@@ -39,7 +40,7 @@ const Profile = ({ page }) => {
   const root = document.body;
   const dispatch = useDispatch();
 
-  const { username } = profileData;
+  const { username, loading } = profileData;
 
   useEffect(() => {
     if (username !== null) {
@@ -59,9 +60,13 @@ const Profile = ({ page }) => {
     dispatch(logoutAsync(token));
   };
 
+  if (loading) {
+    return <ProfileSkeleton />;
+  }
+
   return (
     <>
-      {profileData && (
+      {loading === false && (
         <main className="profile-page">
           <div className="profile-header">
             <img
